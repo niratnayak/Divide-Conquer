@@ -256,8 +256,9 @@ textarea:focus-visible {
 
 .topbar {
     height: 72px;
-    border-bottom: 1px solid var(--border);
-    background: #f6fbf9;
+    background: radial-gradient(circle at 85% 0%, #5b91a340 0, transparent 40%), linear-gradient(100deg, #131b2b, #1e3046 55%, #2f4a63);
+    color: #fff;
+    box-shadow: 0 2px 10px #131b2b2e;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -267,21 +268,21 @@ textarea:focus-visible {
 .topbar .brand-icon {
     width: 36px;
     height: 36px;
-    background: var(--brand);
-    color: white;
+    background: var(--mint);
+    color: var(--ink);
     border-radius: 11px
 }
 
 .topbar .brand b {
     font-size: 15px;
-    color: var(--brand)
+    color: #fff
 }
 
 .topbar .brand small {
     font-size: 10px;
     letter-spacing: 1.8px;
     margin-top: 2px;
-    color: var(--accent-ink)
+    color: var(--mint)
 }
 
 .brand small {
@@ -308,8 +309,8 @@ textarea:focus-visible {
     border-radius: 50%;
     display: grid;
     place-items: center;
-    background: #cce8df;
-    color: var(--brand);
+    background: var(--mint);
+    color: var(--ink);
     font-weight: 800
 }
 
@@ -324,14 +325,21 @@ textarea:focus-visible {
 
 .user-meta small {
     font-size: 10px;
-    color: var(--muted)
+    color: var(--mint)
 }
 
 .icon-button {
     border: 0;
+    border-radius: 10px;
     background: none;
-    color: var(--muted);
+    color: #d6e6ec;
     padding: 9px
+}
+
+.icon-button:hover,
+.icon-button:focus-visible {
+    background: #ffffff1f;
+    color: #fff
 }
 
 .workspace {
