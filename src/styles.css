@@ -2942,3 +2942,11 @@ button:disabled {
 .analysis-panel .chip-row .tag {
     font-size: 12px;
 }
+
+.analysis-panel .eyebrow {
+    color: var(--purple);
+    font-size: 13px;
+    margin: 24px 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+}
