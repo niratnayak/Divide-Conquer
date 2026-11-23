@@ -27,7 +27,7 @@ All routes except register/login need `Authorization: Bearer <token>`.
 | POST | /api/auth/register | public | `{ email, password, role: 'student'\|'tpo', name }` |
 | POST | /api/auth/login | public | `{ email, password, role? }` → `{ token, user }` |
 | GET | /api/auth/me | any | Current user |
-| GET / PUT | /api/profile/me | student | Read / update profile (name, department, cgpa, linkedin, skills, certifications, projects) |
+| GET / PUT | /api/profile/me | student | Read / update profile (name, department, cgpa, linkedin). Skills are set from the uploaded resume |
 | POST | /api/profile/me/resume | student | multipart field `resume` (PDF/DOC/DOCX/TXT, 5 MB) |
 | GET | /api/profile/:userId/resume | owner or tpo | Download resume |
 | GET | /api/analysis/roles | student | Role dropdown options |

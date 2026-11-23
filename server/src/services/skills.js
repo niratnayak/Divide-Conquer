@@ -15,23 +15,6 @@ const KNOWN_SKILLS = [
   'Cybersecurity', 'Cloud Computing',
 ];
 
-/** Accepts "React, CSS" or ["React", " css "] and returns a de-duplicated, trimmed array. */
-export function normalizeList(input, { max = 50 } = {}) {
-  const raw = Array.isArray(input) ? input : String(input ?? '').split(',');
-  const seen = new Set();
-  const out = [];
-  for (const item of raw) {
-    const value = String(item).trim();
-    const key = value.toLowerCase();
-    if (value && !seen.has(key)) {
-      seen.add(key);
-      out.push(value.slice(0, 200));
-    }
-    if (out.length >= max) break;
-  }
-  return out;
-}
-
 const escape = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 /**
