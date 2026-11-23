@@ -1,6 +1,6 @@
-# SkillMatch API
+# ResumeIQ API
 
-Express + MongoDB (Mongoose) backend for the SkillMatch frontend.
+Express + MongoDB (Mongoose) backend for the ResumeIQ frontend.
 
 ## Setup
 

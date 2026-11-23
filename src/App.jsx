@@ -11,7 +11,7 @@ export function Brand() {
   return (
     <div className="brand">
       <span className="brand-icon"><Sparkles size={19} /></span>
-      <span><b>SkillMatch</b><small>PLACEMENT INTELLIGENCE</small></span>
+      <span><b>ResumeIQ</b><small>PLACEMENT INTELLIGENCE</small></span>
     </div>
   );
 }
@@ -77,9 +77,9 @@ export function Login({ onLogin }) {
         <div className="hero-copy">
           <p className="eyebrow light">SKILL-BASED CAREER MATCHING</p>
           <h1>Right skills. Right roles. Right away.</h1>
-          <p>SkillMatch analyses your profile against real job requirements and shows you where you fit best.</p>
+          <p>ResumeIQ analyses your profile against real job requirements and shows you where you fit best.</p>
         </div>
-        <div className="hero-foot">© 2026 SkillMatch · Placement Intelligence</div>
+        <div className="hero-foot">© 2026 ResumeIQ · Placement Intelligence</div>
       </section>
       <section className="login-panel">
         <div className="login-form-wrap">
@@ -147,7 +147,7 @@ export function Login({ onLogin }) {
             {error && <p className="field-error" style={{ fontSize: '13px', marginTop: '6px' }}>{error}</p>}
           </form>
           <button className="text-button" onClick={() => { setRegister(!register); setError(''); setNameError(''); }}>
-            {register ? 'Already have an account? Sign in' : 'New to SkillMatch? Create an account'}
+            {register ? 'Already have an account? Sign in' : 'New to ResumeIQ? Create an account'}
           </button>
         </div>
       </section>
@@ -248,7 +248,7 @@ export function App() {
           user={user}
         />
       )}
-      <footer className="app-footer">SkillMatch <span>·</span> Placement intelligence</footer>
+      <footer className="app-footer">ResumeIQ <span>·</span> Placement intelligence</footer>
     </div>
   );
 }

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "SkillMatch API — auth, student profiles, job postings, applications and skill-based ranking",
+  "description": "ResumeIQ API — auth, student profiles, job postings, applications and skill-based ranking",
   "scripts": {
     "dev": "node --watch src/server.js",
     "start": "node src/server.js",

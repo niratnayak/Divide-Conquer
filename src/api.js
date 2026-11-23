@@ -1,4 +1,4 @@
-// Thin client for the SkillMatch API.
+// Thin client for the ResumeIQ API.
 const BASE = import.meta.env.VITE_API_URL || '/api';
 const TOKEN_KEY = 'skillmatch_token';
 

@@ -40,7 +40,7 @@ const PORT = Number(process.env.PORT) || 5000;
 connectDB(process.env.MONGODB_URI)
   .then(() => resetStuckAnalyses())
   .then(() => app.listen(PORT, () => {
-    console.log(`SkillMatch API running on http://localhost:${PORT}`);
+    console.log(`ResumeIQ API running on http://localhost:${PORT}`);
     console.log(isLLMConfigured()
       ? `AI suggestions enabled (model: ${llmConfig().model})`
       : 'AI suggestions disabled: set GROQ_API_KEY in server/.env');
