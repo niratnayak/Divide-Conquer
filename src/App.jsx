@@ -84,20 +84,20 @@ export function Login({ onLogin }) {
       <section className="login-panel">
         <div className="login-form-wrap">
           <p className="eyebrow">
-            {role === 'Placement officer' ? 'PLACEMENT INTELLIGENCE' : 'WELCOME BACK'}
+            {role === 'Placement officer' ? 'STUDENT SKILL INSIGHTS' : 'WELCOME BACK'}
           </p>
 
           <h2>
             {register
               ? 'Create your workspace.'
               : role === 'Placement officer'
-                ? 'Smarter placements start here.'
+                ? 'Discover talent. Explore skills. Find the right students.'
                 : 'Your next role starts here.'}
           </h2>
 
           <p className="muted">
             {role === 'Placement officer'
-              ? 'Find the right talent faster. Make confident placement decisions.'
+              ? 'Easily explore student profiles, identify key skills, and discover talent based on their capabilities.'
               : 'Sign in to your placement workspace and discover opportunities.'}
           </p>
 
