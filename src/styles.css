@@ -199,7 +199,8 @@ textarea:focus-visible {
 }
 
 .login-fields input,
-.form-grid input {
+.form-grid input,
+.project-links-full input {
     width: 100%;
     border: 1px solid var(--border);
     border-radius: 14px;
@@ -446,6 +447,20 @@ textarea:focus-visible {
     border-radius: 9px
 }
 
+.input-add {
+    display: flex;
+    gap: 6px
+}
+
+.input-add button {
+    margin-top: 7px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: #e9f5f1;
+    color: var(--brand);
+    width: 36px
+}
+
 .inline-success {
     display: flex;
     align-items: center;
@@ -671,13 +686,15 @@ textarea:focus-visible {
 }
 
 /* Form labels */
-.form-grid label {
+.form-grid label,
+.project-links-full label {
     font-size: 13px;
     font-weight: 700;
     color: #3c5c74;
 }
 
-.form-grid input {
+.form-grid input,
+.project-links-full input {
     font-size: 14px;
     padding: 13px 14px;
 }
@@ -747,6 +764,121 @@ textarea:focus-visible {
 input.has-error {
     border-color: #d87070 !important;
     background: #fff8f8 !important;
+}
+
+.input-add input[type="file"] {
+    min-width: 0;
+    font-size: 12px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.input-add input[type="url"] {
+    min-width: 0;
+}
+
+.input-add input[type="file"] {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    padding: 12px;
+    font-size: 13px;
+    cursor: pointer;
+    background: #fff;
+    border: 1px solid #c7e4dd;
+    border-radius: 9px;
+}
+
+.input-add input[type="file"]::file-selector-button {
+    padding: 9px 13px;
+    margin-right: 12px;
+    border: none;
+    border-radius: 7px;
+    background: #2f4a63;
+    color: white;
+    cursor: pointer;
+}
+
+/* Full-width project links section */
+
+.project-links-full {
+    width: 100%;
+    margin-top: 18px;
+    margin-bottom: 20px;
+}
+
+.project-links-full label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #3c5c74;
+    margin-bottom: 7px;
+}
+
+.project-links-full .input-add {
+    display: flex;
+    align-items: stretch;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.project-links-full .input-add input {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #fff;
+    padding: 13px 14px;
+    font-size: 14px;
+    color: var(--ink);
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.project-links-full .input-add input::placeholder {
+    color: #6ea1b0;
+}
+
+.project-links-full .input-add input:focus {
+    border-color: #76a7b4;
+}
+
+.project-links-full .input-add button {
+    width: 48px;
+    min-width: 48px;
+    margin-top: 0;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #e9f5f1;
+    color: var(--brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.2s ease;
+}
+
+.project-links-full .input-add button:hover {
+    background: #d2ebe1;
+    border-color: #86b4be;
+    color: #1d293b;
+    transform: translateY(-1px);
+}
+
+.project-links-full .input-add button.remove-btn {
+    background: #fdf5f5;
+    border-color: #eed6d9;
+    color: #a75b5b;
+}
+
+.project-links-full .input-add button.remove-btn:hover {
+    background: #fae6e8;
+    border-color: #e0b4ba;
+    color: #8c3b3b;
 }
 
 .student-grid {
