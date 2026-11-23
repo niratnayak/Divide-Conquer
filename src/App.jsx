@@ -151,7 +151,7 @@ export function Login({ onLogin }) {
             <input
               type="password"
               minLength="6"
-              placeholder="Password (6+ characters)"
+              placeholder="Password"
               value={password}
               onChange={e => setPassword(e.target.value)}
               required
@@ -162,7 +162,7 @@ export function Login({ onLogin }) {
             {error && <p className="field-error" style={{ fontSize: '13px', marginTop: '6px' }}>{error}</p>}
           </form>
           <button className="text-button" onClick={() => { setRegister(!register); setError(''); setNameError(''); }}>
-            {register ? 'Already have an account? Sign in' : 'New to ResumeIQ? Create an account'}
+            {register ? 'Already have an account?  Sign in' : 'New to ResumeIQ?  Create an account'}
           </button>
         </div>
       </section>
