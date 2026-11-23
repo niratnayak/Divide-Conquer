@@ -46,17 +46,25 @@ export const api = {
   },
 
   // status: 'all' (default) | 'Open' | 'Closed'
-  listJobs: (status = 'all') => request(`/jobs?status=${encodeURIComponent(status)}`),
-  createJob: (payload) => request('/jobs', { method: 'POST', body: payload }),
-  updateJob: (id, payload) => request(`/jobs/${id}`, { method: 'PATCH', body: payload }),
-  shortlists: (limit = 3) => request(`/jobs/shortlists?limit=${limit}`),
-  leaderboard: (id) => request(`/jobs/${id}/leaderboard`),
   apply: (id) => request(`/jobs/${id}/apply`, { method: 'POST' }),
-  toggleShortlist: (jobId, profileId) => request(`/jobs/${jobId}/shortlist`, { method: 'POST', body: { profileId } }),
 
   // AI suggestions (cached in the database; Groq is only called when something changed)
   getInsights: () => request('/profile/me/insights'),
   refreshInsights: () => request('/profile/me/insights/refresh', { method: 'POST' }),
+
+  // Placement officer: students ranked by evidence for the skills searched
+  studentDepartments: () => request('/students/departments'),
+  searchStudents: (filters) => request('/students/search', { method: 'POST', body: filters }),
+  // A student's resume file as a Blob
+  studentResume: async (userId) => {
+    const token = tokenStore.get();
+    const res = await fetch(`${BASE}/profile/${userId}/resume`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      throw new Error(data.error || `Could not open the resume (${res.status})`);
+    }
+    return res.blob();
+  },
 
   // Resume analysis: general (Mode A) and role-specific (Mode B)
   analysisRoles: () => request('/analysis/roles'),

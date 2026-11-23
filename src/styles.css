@@ -3427,3 +3427,341 @@ mark.blank {
         padding: 18px;
     }
 }
+
+/* Placement officer: skill search */
+.ss-filters {
+    padding: 22px 24px;
+    margin-bottom: 22px;
+}
+
+.ss-filter-grid {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.ss-filter-grid label {
+    display: grid;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.ss-filter-grid select,
+.ss-filter-grid input {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #fff;
+    padding: 12px 14px;
+    color: var(--ink);
+    font-size: 14px;
+}
+
+.ss-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 36px 16px;
+    border: 1px dashed var(--border);
+    border-radius: 16px;
+    color: var(--muted);
+    font-size: 14px;
+    background: #fff;
+}
+
+.ss-results {
+    display: grid;
+    gap: 22px;
+    transition: opacity .15s;
+}
+
+.ss-results.is-busy {
+    opacity: .6;
+}
+
+.ss-card {
+    padding: 22px 24px;
+}
+
+.ss-card-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px 20px;
+    margin-bottom: 18px;
+}
+
+.ss-card-head h2 {
+    font-size: 18px;
+    margin: 0 0 3px;
+}
+
+.ss-card-head .muted {
+    font-size: 13px;
+    margin: 0;
+}
+
+/* Evidence levels: one hue, darker = stronger; grey = not found */
+.lv-proven { --lv: #512568; --lv-ink: #fff; }
+.lv-listed { --lv: #8f5fa8; --lv-ink: #fff; }
+.lv-profile { --lv: #d3b8e0; --lv-ink: #3b2147; }
+.lv-none { --lv: #ebe6ed; --lv-ink: #6d5f74; }
+
+.ss-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.ss-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ss-legend i {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    background: var(--lv);
+}
+
+.ss-coverage {
+    display: grid;
+    gap: 18px;
+}
+
+.ss-cov-top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 4px 12px;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.ss-cov-top b {
+    font-size: 15px;
+    color: var(--ink);
+}
+
+.ss-cov-top span {
+    color: var(--muted);
+}
+
+.ss-cov-top strong {
+    color: var(--ink);
+}
+
+/* Stacked bar: segments separated by a 2px gap in the card colour */
+.ss-stack {
+    display: flex;
+    gap: 2px;
+    height: 14px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.ss-stack span {
+    flex-basis: 0;
+    min-width: 4px;
+    background: var(--lv);
+}
+
+.ss-cov-counts {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.ss-sharpest {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 8px 0 0;
+    font-size: 13px;
+    color: var(--ink);
+}
+
+.ss-sharpest svg {
+    color: #b07a1e;
+}
+
+/* Ranking */
+.ss-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+}
+
+.ss-student {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    background: #fff;
+}
+
+.ss-student.top {
+    border-color: var(--lav);
+    box-shadow: 0 0 0 1px var(--lav);
+}
+
+.ss-student-main {
+    display: grid;
+    grid-template-columns: 32px minmax(150px, 1fr) 2fr 130px;
+    align-items: center;
+    gap: 14px;
+}
+
+.ss-rank {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--pale);
+    color: var(--purple);
+    font-weight: 800;
+    font-size: 13px;
+}
+
+.ss-student.top .ss-rank {
+    background: var(--purple);
+    color: #fff;
+}
+
+.ss-who b {
+    display: block;
+    font-size: 15px;
+    color: var(--ink);
+}
+
+.ss-who small {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.ss-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.ss-chip {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--lv);
+    color: var(--lv-ink);
+    cursor: help;
+}
+
+.ss-score {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: flex-end;
+    column-gap: 2px;
+}
+
+.ss-score b {
+    font-size: 20px;
+    color: var(--ink);
+}
+
+.ss-score small {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.ss-meter {
+    flex-basis: 100%;
+    height: 6px;
+    margin-top: 6px;
+    border-radius: 4px;
+    background: var(--pale);
+    overflow: hidden;
+}
+
+.ss-meter i {
+    display: block;
+    height: 100%;
+    background: var(--purple2);
+    border-radius: 0 4px 4px 0;
+}
+
+.ss-student-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 16px;
+    margin: 8px 0 0 46px;
+}
+
+.ss-student-actions .text-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    padding: 0;
+    margin: 0;
+}
+
+.ss-student-actions .flip {
+    transform: rotate(180deg);
+}
+
+.ss-reasons {
+    margin: 10px 0 0 46px;
+    padding: 10px 14px 10px 28px;
+    background: var(--pale);
+    border-radius: 10px;
+    display: grid;
+    gap: 6px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink);
+}
+
+.ss-more {
+    font-size: 13px;
+    margin: 12px 0 0;
+}
+
+@media (max-width: 760px) {
+    .ss-filter-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ss-filters,
+    .ss-card {
+        padding: 18px;
+    }
+
+    .ss-student-main {
+        grid-template-columns: 30px 1fr auto;
+        grid-template-areas: "rank who score" "chips chips chips";
+        row-gap: 10px;
+    }
+
+    .ss-rank { grid-area: rank; }
+    .ss-who { grid-area: who; }
+    .ss-score { grid-area: score; width: 96px; }
+    .ss-chips { grid-area: chips; }
+
+    .ss-student-actions,
+    .ss-reasons {
+        margin-left: 0;
+    }
+}

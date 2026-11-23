@@ -44,6 +44,8 @@ All routes except register/login need `Authorization: Bearer <token>`.
 | GET | /api/analysis/latest | student | Latest general and role-specific results |
 | POST | /api/analysis/general | student | Mode A: general resume quality score (no job involved) |
 | POST | /api/analysis/role | student | Mode B: `{ role, jd? }` → role compatibility score |
+| GET | /api/students/departments | tpo | Departments students have chosen (for the filter) |
+| POST | /api/students/search | tpo | `{ department?, minCgpa?, skills }` → per-skill coverage and students ranked by evidence |
 
 ## Resume analysis
 
@@ -63,6 +65,14 @@ resume and target returns the saved result (`cached: true`) without a call.
   claimed in the profile but not on the resume, or not found in the resume.
 - AI line rewrites are only shown if the quoted line really is in the resume; new numbers become `[X]`
   placeholders and rewrites that add a skill the resume never mentions are dropped.
+
+## Student skill search (placement officers)
+
+`src/services/skillSearch.js` scores each student 0-100 per searched skill from the evidence in their resume
+and profile, with no AI call: used in project/experience lines 60 (+8 per further line, up to +24), only listed
+on the resume 30, a related certification +16 (25 on its own), only typed into the profile 10, not found 0.
+A student's overall score is the average across the skills searched. The response also gives, per skill, how
+many students are at each level, the share who have it, and who is sharpest (with ties counted).
 
 ## Match score (built-in)
 

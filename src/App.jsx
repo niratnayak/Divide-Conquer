@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Sparkles, GraduationCap, BriefcaseBusiness, ArrowRight, LogOut, Loader2
 } from 'lucide-react';
 import { api, tokenStore, ROLE_TO_API, ROLE_FROM_API } from './api.js';
 import StudentDashboard from './StudentDashboard.jsx';
 import TpoDashboard from './TpoDashboard.jsx';
-import { usePolling } from './usePolling.js';
 
 export function Brand() {
   return (
@@ -194,33 +193,6 @@ export function Header({ user, onLogout }) {
 export function App() {
   const [user, setUser] = useState(null);
   const [checking, setChecking] = useState(Boolean(tokenStore.get()));
-  const [jobs, setJobs] = useState([]);
-  const [jobsError, setJobsError] = useState('');
-
-  // Jobs come from MongoDB; both dashboards call reloadJobs after a change
-  const reloadJobs = useCallback(async () => {
-    try {
-      const { jobs: rows } = await api.listJobs('all');
-      // Only update when something actually changed, so the screen doesn't re-render every poll
-      setJobs(current => (JSON.stringify(current) === JSON.stringify(rows) ? current : rows));
-      setJobsError('');
-    } catch (err) {
-      if (err.status === 401) { // session expired
-        tokenStore.clear();
-        setUser(null);
-        return;
-      }
-      setJobsError(err.message || 'Could not load jobs');
-    }
-  }, []);
-
-  useEffect(() => {
-    if (user) reloadJobs();
-  }, [user, reloadJobs]);
-
-  // Live updates: re-read jobs from the database every 10 s and when the tab regains focus
-  usePolling(reloadJobs, 10000, Boolean(user));
-
   useEffect(() => {
     if (!tokenStore.get()) {
       setChecking(false);
@@ -235,7 +207,6 @@ export function App() {
   const handleLogout = () => {
     tokenStore.clear();
     setUser(null);
-    setJobs([]);
   };
 
   if (checking) {
@@ -253,12 +224,8 @@ export function App() {
   return (
     <div className="app-shell">
       <Header user={user} onLogout={handleLogout} />
-      {jobsError && <p className="form-error" style={{ textAlign: 'center', marginTop: '12px' }}>{jobsError}</p>}
       {isOfficer ? (
-        <TpoDashboard
-          jobs={jobs}
-          reloadJobs={reloadJobs}
-        />
+        <TpoDashboard />
       ) : (
         <StudentDashboard
           user={user}
