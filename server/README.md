@@ -34,6 +34,10 @@ All routes except register/login need `Authorization: Bearer <token>`.
 | GET | /api/analysis/latest | student | Latest general and role-specific results |
 | POST | /api/analysis/general | student | Mode A: general resume quality score (no job involved) |
 | POST | /api/analysis/role | student | Mode B: `{ role, jd? }` → role compatibility score |
+| GET | /api/interview/latest | student | Most recent interview practice session |
+| POST | /api/interview/sessions | student | `{ role, jd?, categories, count }` → new session with AI-written questions |
+| POST | /api/interview/sessions/:id/questions/:qid/answer | student | `{ answer }` → AI feedback (score /10, criteria, strengths, gaps, answer structure, follow-up) |
+| POST | /api/interview/sessions/:id/questions/:qid/follow-up | student | Adds the suggested follow-up as a new question (no AI call) |
 | GET | /api/students/departments | tpo | Departments students have chosen (for the filter) |
 | POST | /api/students/search | tpo | `{ department?, minCgpa?, skills }` → per-skill coverage and students ranked by evidence |
 
@@ -55,6 +59,15 @@ resume and target returns the saved result (`cached: true`) without a call.
   claimed in the profile but not on the resume, or not found in the resume.
 - AI line rewrites are only shown if the quoted line really is in the resume; new numbers become `[X]`
   placeholders and rewrites that add a skill the resume never mentions are dropped.
+
+## Interview preparation
+
+`src/services/interview.js`, `src/routes/interview.js`. One Groq call writes the questions for the chosen
+categories (technical, project, resume, HR, scenario), spread evenly; one call evaluates each answer and also
+suggests a follow-up question. Checked in code: project and resume questions must name something in the resume,
+technical ones a resume skill or role requirement; the overall score is the average of the criteria that apply
+(technical correctness is skipped for HR questions); answer-structure steps that claim experience without a
+`[placeholder]` are removed. Capped by `AI_INTERVIEW_DAILY_LIMIT` per student per day.
 
 ## Student skill search (placement officers)
 

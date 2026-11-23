@@ -45,6 +45,12 @@ export const api = {
     return request('/profile/me/resume', { method: 'POST', form });
   },
 
+  // Interview preparation: AI-written questions, then feedback on each answer
+  latestInterview: () => request('/interview/latest'),
+  startInterview: (setup) => request('/interview/sessions', { method: 'POST', body: setup }),
+  answerQuestion: (sessionId, questionId, answer) => request(`/interview/sessions/${sessionId}/questions/${questionId}/answer`, { method: 'POST', body: { answer } }),
+  addFollowUp: (sessionId, questionId) => request(`/interview/sessions/${sessionId}/questions/${questionId}/follow-up`, { method: 'POST' }),
+
   // Placement officer: students ranked by evidence for the skills searched
   studentDepartments: () => request('/students/departments'),
   searchStudents: (filters) => request('/students/search', { method: 'POST', body: filters }),

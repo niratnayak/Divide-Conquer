@@ -2286,3 +2286,492 @@ mark.blank {
         margin-left: 0;
     }
 }
+
+/* Interview preparation */
+.iv-panel {
+    padding: 24px 26px;
+    margin-top: 22px;
+}
+
+.iv-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.iv-head h2 {
+    font-size: 18px;
+    margin: 0 0 3px;
+}
+
+.iv-head .muted {
+    font-size: 13px;
+    margin: 0;
+}
+
+.iv-head > div {
+    flex: 1;
+}
+
+.iv-new {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--brand);
+    font-weight: 700;
+    font-size: 13px;
+    padding: 8px 12px;
+    border-radius: 10px;
+}
+
+.iv-new:hover {
+    background: var(--mist);
+}
+
+/* Setup */
+.iv-setup label {
+    display: grid;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.iv-setup-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.iv-setup input:not([type=checkbox]),
+.iv-setup textarea,
+.iv-answer textarea {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #fff;
+    padding: 12px 14px;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    resize: vertical;
+}
+
+.iv-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 18px 0 8px;
+}
+
+.iv-cats {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+
+.iv-setup .iv-cat {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: 4px;
+    padding: 12px 12px 12px 36px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color .15s, background .15s;
+}
+
+.iv-cat input {
+    position: absolute;
+    left: 12px;
+    top: 14px;
+    accent-color: var(--brand);
+}
+
+.iv-cat b {
+    font-size: 14px;
+}
+
+.iv-cat small {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--muted);
+}
+
+.iv-setup .iv-cat.on {
+    border-color: var(--accent);
+    background: var(--mist);
+}
+
+.iv-count {
+    display: inline-flex;
+    gap: 6px;
+    margin-bottom: 18px;
+}
+
+.iv-count button {
+    min-width: 46px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #fff;
+    color: var(--ink);
+    font-weight: 700;
+}
+
+.iv-count button.on {
+    background: var(--brand);
+    border-color: var(--brand);
+    color: #fff;
+}
+
+.iv-setup .text-button,
+.iv-question .text-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
+    font-size: 13px;
+}
+
+.iv-setup .small-primary,
+.iv-question .small-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    padding: 10px 16px;
+}
+
+/* Session */
+.iv-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    border-radius: 12px;
+    background: var(--mist);
+    font-size: 14px;
+    color: var(--ink);
+}
+
+.iv-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.iv-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+    position: sticky;
+    top: 95px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+}
+
+.iv-list button {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 26px 1fr auto;
+    align-items: start;
+    gap: 10px;
+    text-align: left;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #fff;
+    color: var(--ink);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.iv-list button:hover {
+    border-color: var(--accent);
+}
+
+.iv-list button.on {
+    border-color: var(--brand);
+    box-shadow: 0 0 0 1px var(--brand);
+}
+
+.iv-list button.follow {
+    margin-left: 18px;
+    width: calc(100% - 18px);
+}
+
+.iv-num {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--mist);
+    color: var(--brand);
+    font-weight: 800;
+    font-size: 12px;
+}
+
+.iv-list button.on .iv-num {
+    background: var(--brand);
+    color: #fff;
+}
+
+.iv-list-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.iv-list-text small {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+}
+
+.iv-badge {
+    min-width: 34px;
+    text-align: center;
+    font-weight: 800;
+    font-size: 12px;
+    padding: 3px 6px;
+    border-radius: 999px;
+    background: var(--brand);
+    color: #fff;
+}
+
+.iv-badge.todo {
+    background: var(--mist);
+    color: var(--muted);
+}
+
+.iv-question {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: #fff;
+    padding: 20px 22px;
+}
+
+.iv-q-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.iv-q-meta b {
+    color: var(--ink);
+}
+
+.iv-tag {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: var(--mint);
+    color: var(--brand);
+}
+
+.iv-question h3 {
+    font-size: 19px;
+    line-height: 1.4;
+    margin: 12px 0 4px;
+    color: var(--ink);
+}
+
+.iv-tests {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0 0 14px;
+}
+
+.iv-answer {
+    display: grid;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 4px;
+}
+
+.iv-nav {
+    margin-left: auto;
+    display: inline-flex;
+    gap: 14px;
+}
+
+.iv-nav .text-button:disabled {
+    opacity: .4;
+}
+
+/* Feedback */
+.iv-feedback {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    display: grid;
+    gap: 16px;
+}
+
+.iv-score {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.iv-score-num {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+    background: var(--brand);
+    color: #fff;
+    border-radius: 14px;
+    padding: 10px 16px;
+}
+
+.iv-score-num b {
+    font-size: 30px;
+}
+
+.iv-score-num small {
+    font-size: 13px;
+    color: var(--mint);
+}
+
+.iv-score > div:last-child b {
+    display: block;
+    font-size: 16px;
+    color: var(--ink);
+}
+
+.iv-score > div:last-child small {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.iv-criteria {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 28px;
+}
+
+.iv-crit {
+    display: grid;
+    grid-template-columns: 150px 1fr 44px;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--ink);
+}
+
+.iv-crit b {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.iv-crit-bar {
+    height: 8px;
+    border-radius: 4px;
+    background: var(--mist);
+    overflow: hidden;
+}
+
+.iv-crit-bar i {
+    display: block;
+    height: 100%;
+    background: var(--accent);
+    border-radius: 0 4px 4px 0;
+}
+
+.iv-crit.na {
+    color: var(--muted);
+}
+
+.iv-fb-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.iv-fb {
+    border: 1px solid var(--border);
+    border-top: 4px solid var(--accent);
+    border-radius: 12px;
+    padding: 12px 14px;
+}
+
+.iv-fb.good { border-top-color: var(--brand); }
+.iv-fb.miss { border-top-color: #c58a2c; }
+.iv-fb.improve { border-top-color: var(--accent); }
+
+.iv-fb p,
+.iv-structure p,
+.iv-followup p {
+    margin: 0 0 6px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .8px;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+}
+
+.iv-fb ul,
+.iv-structure ol {
+    margin: 0;
+    padding-left: 18px;
+    display: grid;
+    gap: 5px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink);
+}
+
+.iv-structure {
+    background: var(--mist);
+    border-radius: 12px;
+    padding: 14px 16px;
+}
+
+.iv-structure small {
+    display: block;
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.iv-followup {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    border: 1px dashed var(--accent);
+    border-radius: 12px;
+    padding: 12px 14px;
+    color: var(--accent-ink);
+}
+
+.iv-followup b {
+    font-size: 15px;
+    color: var(--ink);
+}

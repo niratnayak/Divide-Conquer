@@ -6,6 +6,7 @@ import authRoutes from './routes/auth.js';
 import profileRoutes from './routes/profile.js';
 import analysisRoutes from './routes/analysis.js';
 import studentRoutes from './routes/students.js';
+import interviewRoutes from './routes/interview.js';
 import { notFound, errorHandler } from './middleware/error.js';
 import { isLLMConfigured, llmConfig } from './services/llm.js';
 
@@ -26,6 +27,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/analysis', analysisRoutes);
 app.use('/api/students', studentRoutes);
+app.use('/api/interview', interviewRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

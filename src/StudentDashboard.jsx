@@ -4,6 +4,7 @@ import {
 } from 'lucide-react';
 import { api } from './api.js';
 import ResumeAnalysis from './ResumeAnalysis.jsx';
+import InterviewPrep from './InterviewPrep.jsx';
 import TagInput from './TagInput.jsx';
 
 function Tag({ children, tone = '' }) {
@@ -399,6 +400,8 @@ export function StudentDashboard({ user, onSelectJob }) {
       </div>
 
       <ResumeAnalysis version={aiVersion} hasResume={Boolean(resumeDisplayName)} />
+
+      <InterviewPrep hasResume={Boolean(resumeDisplayName)} />
     </div>
   );
 }
