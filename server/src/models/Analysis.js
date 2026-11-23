@@ -20,6 +20,8 @@ const analysisSchema = new mongoose.Schema(
     // Categories, skills, suggestions etc. (shape differs per mode; see services/resumeScoring.js)
     result: { type: mongoose.Schema.Types.Mixed, default: {} },
     model: String,
+    // Tailored resume built from this analysis (made once, on request; see services/tailor.js)
+    tailored: { type: mongoose.Schema.Types.Mixed, default: null },
   },
   { timestamps: true }
 );
@@ -39,6 +41,7 @@ export function serializeAnalysis(doc, profile) {
     ...doc.result,
     model: doc.model,
     createdAt: doc.createdAt,
+    hasTailored: Boolean(doc.tailored),
     // true when a newer resume was uploaded after this analysis
     stale: Boolean(uploadedAt && doc.resumeUploadedAt && new Date(uploadedAt) > new Date(doc.resumeUploadedAt)),
   };

@@ -63,6 +63,22 @@ export const api = {
   latestAnalyses: () => request('/analysis/latest'),
   analyseGeneral: () => request('/analysis/general', { method: 'POST' }),
   analyseRole: (role, jd) => request('/analysis/role', { method: 'POST', body: { role, jd } }),
+  tailorResume: (analysisId) => request(`/analysis/${analysisId}/tailor`, { method: 'POST' }),
+  // Returns the Word file as a Blob
+  downloadTailored: async (analysisId, values) => {
+    const token = tokenStore.get();
+    const res = await fetch(`${BASE}/analysis/${analysisId}/tailor/docx`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+      body: JSON.stringify({ values }),
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      throw new Error(data.error || `Download failed (${res.status})`);
+    }
+    const name = /filename="([^"]+)"/.exec(res.headers.get('Content-Disposition') || '')?.[1] || 'resume_tailored.docx';
+    return { blob: await res.blob(), name };
+  },
 
   myApplications: () => request('/applications/me'),
   demand: () => request('/market/demand'),

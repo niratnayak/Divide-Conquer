@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Sparkles, Loader2, Lightbulb, AlertTriangle, ArrowRight, Target, FileSearch } from 'lucide-react';
+import { Sparkles, Loader2, Lightbulb, AlertTriangle, ArrowRight, Target, FileSearch, Download, FileText } from 'lucide-react';
 import { api } from './api.js';
 
 function Tag({ children, tone = '' }) {
@@ -169,6 +169,138 @@ function RoleResult({ r }) {
   );
 }
 
+/** Text with its [X] blanks highlighted. */
+function Marked({ text }) {
+  return String(text).split(/(\[[^\]]+\])/).map((part, i) => (
+    /^\[[^\]]+\]$/.test(part) ? <mark className="blank" key={i}>{part}</mark> : part
+  ));
+}
+
+function TailoredPreview({ t }) {
+  return (
+    <div className="tailored-preview">
+      {t.name && <h3>{t.name}</h3>}
+      {t.headline && <p className="tp-headline"><Marked text={t.headline} /></p>}
+      {t.contact.length > 0 && <p className="tp-contact">{t.contact.join('  |  ')}</p>}
+      {t.summary && <><h4>Summary</h4><p><Marked text={t.summary} /></p></>}
+      {t.skills.length > 0 && (
+        <>
+          <h4>Skills</h4>
+          {t.skills.map((g) => <p key={g.category}><b>{g.category ? `${g.category}: ` : ''}</b>{g.items.join(', ')}</p>)}
+        </>
+      )}
+      {t.sections.map((s) => (
+        <div key={s.title}>
+          <h4>{s.title}</h4>
+          {s.entries.map((e, i) => (
+            <div className="tp-entry" key={i}>
+              {(e.title || e.dates) && <p className="tp-entry-top"><b><Marked text={e.title} /></b><span><Marked text={e.dates} /></span></p>}
+              {e.subtitle && <p><i><Marked text={e.subtitle} /></i></p>}
+              {e.bullets.length > 0 && <ul>{e.bullets.map((b, j) => <li key={j}><Marked text={b.text} /></li>)}</ul>}
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/**
+ * After reading an analysis, the student can turn it into a tailored resume (one AI call, saved),
+ * fill in the number blanks and download it as a Word file.
+ */
+function TailorPanel({ r }) {
+  const [data, setData] = useState(null);
+  const [values, setValues] = useState([]);
+  const [busy, setBusy] = useState('');
+  const [error, setError] = useState('');
+
+  const generate = async () => {
+    setBusy('generate');
+    setError('');
+    try {
+      const d = await api.tailorResume(r.id);
+      setData(d);
+      setValues(d.blanks.map(() => ''));
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setBusy('');
+    }
+  };
+
+  const download = async () => {
+    setBusy('download');
+    setError('');
+    try {
+      const { blob, name } = await api.downloadTailored(r.id, values);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = name;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setBusy('');
+    }
+  };
+
+  return (
+    <div className="tailor-box">
+      <p className="eyebrow">TAILORED RESUME</p>
+      {!data && (
+        <>
+          <p className="muted">
+            Read through the analysis above first. When you're happy with it, generate a version of your resume rewritten
+            with these suggestions{r.mode === 'role' ? ` for ${r.role}` : ''}. It only uses what is already in your resume:
+            no new skills, projects or numbers.
+          </p>
+          <div className="analysis-run">
+            <button className="small-primary" onClick={generate} disabled={Boolean(busy) || r.stale}>
+              {busy === 'generate'
+                ? <><Loader2 size={12} className="spin" /> Generating…</>
+                : <><FileText size={12} /> {r.hasTailored ? 'Show tailored version' : 'Generate tailored version'}</>}
+            </button>
+            {r.stale && <small className="muted">Run the analysis on your new resume first.</small>}
+          </div>
+        </>
+      )}
+      {error && <p className="form-error"><AlertTriangle size={13} /> {error}</p>}
+      {data && (
+        <>
+          <TailoredPreview t={data.tailored} />
+          {data.blanks.length > 0 && (
+            <div className="blank-form">
+              <p className="priority-legend">
+                Fill in the highlighted blanks with your real numbers. If you don't know one, leave it empty and that number is left out.
+              </p>
+              {data.blanks.map((b, i) => (
+                <label key={i}>
+                  <small><Marked text={b.context} /></small>
+                  <input
+                    value={values[i] ?? ''}
+                    placeholder={b.blank}
+                    maxLength={30}
+                    onChange={(e) => setValues((v) => v.map((x, j) => (j === i ? e.target.value : x)))}
+                  />
+                </label>
+              ))}
+            </div>
+          )}
+          <div className="analysis-run">
+            <button className="small-primary" onClick={download} disabled={Boolean(busy)}>
+              {busy === 'download' ? <><Loader2 size={12} className="spin" /> Preparing…</> : <><Download size={12} /> Download Word file (.docx)</>}
+            </button>
+            <small className="muted">Check it before you send it: you can edit anything in Word.</small>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 /**
  * Resume analysis in two modes. General (Mode A) ignores jobs entirely; role-specific (Mode B)
  * compares against a chosen role and optional JD. Both can be run on the same resume.
@@ -278,6 +410,7 @@ export default function ResumeAnalysis({ version = 0, hasResume = false }) {
 
       {current && tab === 'general' && <GeneralResult r={current} />}
       {current && tab === 'role' && <RoleResult r={current} />}
+      {current && <TailorPanel key={current.id} r={current} />}
       {current && <p className="disclaimer">Scores mix fixed rules and AI judgement. Treat them as advice, not a verdict.</p>}
     </section>
   );
