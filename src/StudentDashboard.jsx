@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {
-  CheckCircle2, X, Plus, Upload, AlertTriangle
+  CheckCircle2, Upload, AlertTriangle
 } from 'lucide-react';
 import { api } from './api.js';
 import ResumeAnalysis from './ResumeAnalysis.jsx';
 import InterviewPrep from './InterviewPrep.jsx';
-import TagInput from './TagInput.jsx';
 
 function Tag({ children, tone = '' }) {
   return <span className={`tag ${tone}`}>{children}</span>;
@@ -15,9 +14,6 @@ export function StudentDashboard({ user, onSelectJob }) {
   const [name, setName] = useState(user?.name || '');
   const [nameError, setNameError] = useState('');
   const [linkedin, setLinkedin] = useState('');
-  const [skills, setSkills] = useState([]);
-  const [certifications, setCertifications] = useState([]);
-  const [projects, setProjects] = useState(['']);
   const [resume, setResume] = useState(null);
   const [extracted, setExtracted] = useState([]);
   const [saved, setSaved] = useState(false);
@@ -41,11 +37,6 @@ export function StudentDashboard({ user, onSelectJob }) {
         setLinkedin(profile.linkedin || '');
         setCgpa(profile.cgpa != null ? String(profile.cgpa) : '');
         setDepartment(profile.department || '');
-        setSkills(profile.skills || []);
-        setCertifications(profile.certifications || []);
-        if (profile.projects && profile.projects.length > 0) {
-          setProjects(profile.projects);
-        }
         setResume(profile.resume);
         setExtracted(profile.extractedSkills || []);
       })
@@ -119,16 +110,12 @@ export function StudentDashboard({ user, onSelectJob }) {
     setSaving(true);
 
     try {
-      const cleanProjects = projects.map(p => p.trim()).filter(Boolean);
       const parsedCgpa = (cgpa === '' || cgpa === null || cgpa === undefined) ? null : Number(cgpa);
       const { profile } = await api.updateProfile({
         name: name.trim(),
         department: department.trim(),
         linkedin: linkedin.trim(),
         cgpa: parsedCgpa,
-        skills,
-        certifications,
-        projects: cleanProjects,
       });
 
       if (profile) {
@@ -136,11 +123,6 @@ export function StudentDashboard({ user, onSelectJob }) {
         setLinkedin(profile.linkedin || '');
         setCgpa(profile.cgpa != null ? String(profile.cgpa) : '');
         setDepartment(profile.department || '');
-        setSkills(profile.skills || []);
-        setCertifications(profile.certifications || []);
-        if (profile.projects && profile.projects.length > 0) {
-          setProjects(profile.projects);
-        }
         setResume(profile.resume);
         setExtracted(profile.extractedSkills || []);
       }
@@ -290,68 +272,6 @@ export function StudentDashboard({ user, onSelectJob }) {
                 )}
               </select>
             </label>
-          </div>
-
-          <TagInput
-            label="Skills"
-            values={skills}
-            onChange={(v) => { setSkills(v); setSaved(false); }}
-            placeholder="e.g. React, Python, SQL — press Enter after each"
-            hint="Add the technical skills you can show evidence for. Press Enter or comma after each one."
-            suggestions={extracted}
-            suggestionLabel="Found in your resume:"
-          />
-
-          <TagInput
-            label="Certifications"
-            values={certifications}
-            onChange={(v) => { setCertifications(v); setSaved(false); }}
-            placeholder="e.g. AWS Cloud Practitioner — press Enter after each"
-            hint="Include the issuer if helpful, e.g. “Google Data Analytics (Coursera)”."
-            max={20}
-          />
-
-          <div className="project-links-full">
-            <label>Project Links</label>
-            {projects.map((project, index) => (
-              <div className="input-add" key={index}>
-                <input
-                  type="url"
-                  placeholder="https://github.com/username/project"
-                  value={project}
-                  onChange={e =>
-                    setProjects(current =>
-                      current.map((item, i) =>
-                        i === index ? e.target.value : item
-                      )
-                    )
-                  }
-                />
-                {projects.length > 1 && (
-                  <button
-                    type="button"
-                    className="remove-btn"
-                    title="Remove link"
-                    aria-label="Remove project"
-                    onClick={() =>
-                      setProjects(current => current.filter((_, i) => i !== index))
-                    }
-                  >
-                    <X size={15} />
-                  </button>
-                )}
-                {index === projects.length - 1 && (
-                  <button
-                    type="button"
-                    aria-label="Add another project"
-                    title="Add project link"
-                    onClick={() => setProjects(current => [...current, ''])}
-                  >
-                    <Plus size={15} />
-                  </button>
-                )}
-              </div>
-            ))}
           </div>
 
           {saved && <p className="inline-success" style={{ marginTop: '8px' }}><CheckCircle2 size={14} /> Profile changes saved to database.</p>}

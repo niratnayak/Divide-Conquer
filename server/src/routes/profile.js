@@ -4,7 +4,7 @@ import StudentProfile from '../models/StudentProfile.js';
 import User from '../models/User.js';
 import { requireAuth, requireRole } from '../middleware/auth.js';
 import { resumeUpload } from '../middleware/upload.js';
-import { normalizeList, extractSkillsFromText, parseResumeText } from '../services/skills.js';
+import { extractSkillsFromText, parseResumeText } from '../services/skills.js';
 import { resumeProblem } from '../services/resumeScoring.js';
 import { asyncHandler, HttpError } from '../utils/asyncHandler.js';
 
@@ -15,6 +15,8 @@ async function respondWithAnalysis(res, profileId, extra = {}) {
   const fresh = await StudentProfile.findById(profileId);
   res.json({ profile: { ...fresh.toPublic(), ...extra } });
 }
+
+const sameList = (a = [], b = []) => a.length === b.length && a.every((x, i) => x === b[i]);
 
 async function getOrCreateProfile(userId) {
   let profile = await StudentProfile.findOne({ user: userId });
@@ -28,13 +30,18 @@ async function getOrCreateProfile(userId) {
 // GET /api/profile/me
 router.get('/me', requireAuth, requireRole('student'), asyncHandler(async (req, res) => {
   const profile = await getOrCreateProfile(req.user.id);
+  // Skills come from the resume. Profiles saved before that rule get their skills synced once here.
+  if (profile.resume?.originalName && !sameList(profile.skills, profile.extractedSkills)) {
+    profile.skills = profile.extractedSkills;
+    await profile.save();
+  }
   res.json({ profile: profile.toPublic() });
 }));
 
-// PUT /api/profile/me  { name, department, cgpa, linkedin, skills, certifications, projects }
+// PUT /api/profile/me  { name, department, cgpa, linkedin } — skills come from the uploaded resume
 router.put('/me', requireAuth, requireRole('student'), asyncHandler(async (req, res) => {
   const profile = await getOrCreateProfile(req.user.id);
-  const { name, department, cgpa, linkedin, skills, certifications, projects } = req.body;
+  const { name, department, cgpa, linkedin } = req.body;
 
   if (name !== undefined) profile.name = String(name).trim().slice(0, 120);
   if (department !== undefined) profile.department = String(department).trim().slice(0, 120);
@@ -47,9 +54,6 @@ router.put('/me', requireAuth, requireRole('student'), asyncHandler(async (req, 
       profile.cgpa = Math.round(value * 100) / 100;
     }
   }
-  if (skills !== undefined) profile.skills = normalizeList(skills);
-  if (certifications !== undefined) profile.certifications = normalizeList(certifications, { max: 20 });
-  if (projects !== undefined) profile.projects = normalizeList(projects, { max: 20 });
 
   await profile.save();
   if (name !== undefined) await User.updateOne({ _id: req.user.id }, { name: profile.name });
@@ -86,6 +90,8 @@ router.post(
     };
 
     profile.extractedSkills = extractSkillsFromText(text);
+    // The skills found in the resume are the student's saved skills (shown on the resume card)
+    profile.skills = profile.extractedSkills;
     // Saved so the AI can use it later without re-reading the file
     profile.resumeText = text.replace(/[ \t]+/g, ' ').replace(/\n{3,}/g, '\n\n').trim().slice(0, 20000);
 
