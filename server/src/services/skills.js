@@ -67,11 +67,10 @@ export async function parseResumeText(filePath, originalName) {
       return await fs.readFile(filePath, 'utf8');
     }
     if (ext === '.pdf') {
-      const { PDFParse } = await import('pdf-parse');
+      const { default: pdfParse } = await import('pdf-parse');
       const buffer = await fs.readFile(filePath);
-      const parser = new PDFParse({ data: buffer });
-      const result = await parser.getText();
-      return typeof result === 'string' ? result : (result?.text || '');
+      const result = await pdfParse(buffer);
+      return result?.text || '';
     }
     if (ext === '.docx') {
       const res = await mammoth.extractRawText({ path: filePath });
