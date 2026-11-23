@@ -245,7 +245,6 @@ export function App() {
         />
       ) : (
         <StudentDashboard
-          jobs={jobs}
           user={user}
         />
       )}

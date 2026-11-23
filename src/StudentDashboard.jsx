@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  CheckCircle2, X, Plus, Upload, ChartNoAxesColumn, Search, FileText, Lock
+  CheckCircle2, X, Plus, Upload, ChartNoAxesColumn
 } from 'lucide-react';
 import { api } from './api.js';
 import ResumeAnalysis from './ResumeAnalysis.jsx';
@@ -11,7 +11,7 @@ function Tag({ children, tone = '' }) {
   return <span className={`tag ${tone}`}>{children}</span>;
 }
 
-export function StudentDashboard({ jobs = [], user, onSelectJob }) {
+export function StudentDashboard({ user, onSelectJob }) {
   const [name, setName] = useState(user?.name || '');
   const [nameError, setNameError] = useState('');
   const [linkedin, setLinkedin] = useState('');
@@ -25,8 +25,6 @@ export function StudentDashboard({ jobs = [], user, onSelectJob }) {
   const [saveError, setSaveError] = useState('');
   const [uploading, setUploading] = useState(false);
   const [uploadNotice, setUploadNotice] = useState('');
-  const [filter, setFilter] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
   const [cgpa, setCgpa] = useState('');
   const [cgpaError, setCgpaError] = useState('');
   const [department, setDepartment] = useState('');
@@ -195,14 +193,6 @@ export function StudentDashboard({ jobs = [], user, onSelectJob }) {
       e.target.value = '';
     }
   };
-
-  const filtered = jobs
-    .filter(j => {
-      if (statusFilter === 'open') return j.status !== 'Closed';
-      if (statusFilter === 'closed') return j.status === 'Closed';
-      return true;
-    })
-    .filter(j => `${j.title} ${j.company} ${j.department || ''} ${j.skills.join(' ')}`.toLowerCase().includes(filter.toLowerCase()));
 
   const maxDemand = Math.max(1, ...demandList.map(([, n]) => n));
 
@@ -432,80 +422,6 @@ export function StudentDashboard({ jobs = [], user, onSelectJob }) {
       </div>
 
       <ResumeAnalysis version={aiVersion} hasResume={Boolean(resumeDisplayName)} />
-
-      <section className="opportunities">
-        <div className="section-heading">
-          <div>
-            <h2>OPPORTUNITIES & ROLES</h2>
-            <p className="muted">Explore open positions or view completed placement drives.</p>
-          </div>
-          <div className="search-box">
-            <Search size={15} />
-            <input placeholder="Search roles, skills, or department" value={filter} onChange={e => setFilter(e.target.value)} />
-          </div>
-        </div>
-
-        <div className="job-status-filter">
-          <button
-            type="button"
-            className={`status-filter-btn ${statusFilter === 'all' ? 'active' : ''}`}
-            onClick={() => setStatusFilter('all')}
-          >
-            All Roles ({jobs.length})
-          </button>
-          <button
-            type="button"
-            className={`status-filter-btn ${statusFilter === 'open' ? 'active' : ''}`}
-            onClick={() => setStatusFilter('open')}
-          >
-            Open ({jobs.filter(j => j.status !== 'Closed').length})
-          </button>
-          <button
-            type="button"
-            className={`status-filter-btn ${statusFilter === 'closed' ? 'active' : ''}`}
-            onClick={() => setStatusFilter('closed')}
-          >
-            Closed / Filled ({jobs.filter(j => j.status === 'Closed').length})
-          </button>
-        </div>
-
-        <div className="job-grid">
-          {filtered.map(job => {
-            const isClosed = job.status === 'Closed';
-            return (
-              <article className={`job-card ${isClosed ? 'is-closed' : ''}`} key={job.id}>
-                <div className="job-card-top">
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
-                      <h3 style={{ margin: 0 }}>{job.title}</h3>
-                      <Tag tone={isClosed ? 'danger' : 'success'}>
-                        {isClosed ? 'CLOSED · FILLED' : 'OPEN'}
-                      </Tag>
-                    </div>
-                    <p>{job.company}{job.department ? ` · ${job.department}` : ''}{job.cgpaCutoff ? ` · Min CGPA: ${job.cgpaCutoff}` : ''}</p>
-                  </div>
-                  <FileText size={15} />
-                </div>
-                <div className="tags">
-                  {job.skills.map(s => <Tag key={s}>{s}</Tag>)}
-                </div>
-                {isClosed ? (
-                  <div className="student-job-note closed-note">
-                    <Lock size={14} />
-                    Role closed · Position has been filled
-                  </div>
-                ) : (
-                  <div className="student-job-note">
-                    <CheckCircle2 size={14} />
-                    Required skills shown above · Accepting applications
-                  </div>
-                )}
-              </article>
-            );
-          })}
-        </div>
-        {filtered.length === 0 && <div className="empty-state">No roles match that search.</div>}
-      </section>
     </div>
   );
 }
