@@ -375,7 +375,7 @@ export function StudentDashboard({ user, onSelectJob }) {
             <span>
               <b>{resumeDisplayName || (uploading ? 'Uploading resume…' : 'Upload your resume')}</b>
               <small>
-                PDF, DOCX, or TXT · up to 5 MB
+                PDF, Word (DOC or DOCX), or TXT · up to 5 MB
                 {extracted && extracted.length > 0 ? ` · detected: ${extracted.join(', ')}` : ''}
               </small>
             </span>
