@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600&display=swap');
 
 :root {
     font-family: 'DM Sans', sans-serif;
@@ -88,11 +88,12 @@ textarea:focus-visible {
 
 .brand small {
     display: block;
-    font-size: 8px;
-    letter-spacing: 2px;
+    font-family: 'Space Grotesk', 'DM Sans', sans-serif;
+    font-size: 12px;
+    letter-spacing: 2.4px;
     color: #89b791;
-    margin-top: 3px;
-    font-weight: 700
+    margin-top: 4px;
+    font-weight: 600
 }
 
 .hero-copy {
@@ -276,7 +277,21 @@ textarea:focus-visible {
 }
 
 .topbar .brand small {
-    font-size: 7px
+    font-size: 10px;
+    letter-spacing: 1.8px;
+    margin-top: 2px;
+    color: var(--accent)
+}
+
+.brand small {
+    white-space: nowrap
+}
+
+@media (max-width: 480px) {
+    .topbar .brand small {
+        font-size: 9px;
+        letter-spacing: 1px
+    }
 }
 
 .user-area {
@@ -286,6 +301,7 @@ textarea:focus-visible {
 }
 
 .avatar {
+    flex: none;
     width: 34px;
     height: 34px;
     border-radius: 50%;
