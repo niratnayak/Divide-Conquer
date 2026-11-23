@@ -2858,36 +2858,6 @@ button:disabled {
     font-weight: 700;
 }
 
-.cat-list {
-    display: grid;
-    gap: 12px;
-    margin-bottom: 20px;
-}
-
-.cat-row .cat-top {
-    display: flex;
-    justify-content: space-between;
-    font-size: 15px;
-    margin-bottom: 5px;
-}
-
-.cat-row .cat-top span {
-    font-weight: 700;
-    color: var(--purple);
-}
-
-.cat-row small {
-    display: block;
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.5;
-    margin-top: 5px;
-}
-
-.cat-row.na {
-    opacity: .7;
-}
-
 .chip-row {
     display: flex;
     flex-wrap: wrap;
@@ -2949,4 +2919,182 @@ button:disabled {
     margin: 24px 0 10px;
     padding-bottom: 6px;
     border-bottom: 1px solid var(--border);
+}
+
+/* Category score chart: one row per category, bars share a 0-100% axis */
+.cat-chart {
+    --cc-cols: minmax(150px, 30%) 1fr 64px;
+    margin: 8px 0 6px;
+}
+
+.cc-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--cc-cols);
+    align-items: center;
+    column-gap: 16px;
+    min-height: 38px;
+    border-radius: 8px;
+    outline: none;
+}
+
+.cc-row:hover,
+.cc-row:focus-visible {
+    background: var(--pale);
+}
+
+.cc-row:focus-visible {
+    box-shadow: 0 0 0 2px var(--lav);
+}
+
+.cc-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    padding-left: 8px;
+}
+
+/* Gridlines at 25/50/75/100% run through every row, so they read as one continuous grid */
+.cc-track {
+    position: relative;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    border-left: 1px solid var(--muted);
+    background: repeating-linear-gradient(to right, transparent 0 calc(25% - 1px), var(--border) calc(25% - 1px) 25%);
+}
+
+.cc-track i {
+    display: block;
+    height: 12px;
+    background: var(--purple2);
+    border-radius: 0 4px 4px 0;
+}
+
+.cc-value {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    text-align: right;
+    padding-right: 8px;
+    font-variant-numeric: tabular-nums;
+}
+
+.cc-value small {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+}
+
+.cc-row.na .cc-label,
+.cc-row.na .cc-value {
+    color: var(--muted);
+    font-weight: 500;
+}
+
+.cc-tip {
+    position: absolute;
+    z-index: 5;
+    left: calc(30% + 16px);
+    bottom: calc(100% - 4px);
+    max-width: min(420px, 70%);
+    background: var(--ink);
+    color: #fff;
+    font-size: 13px;
+    line-height: 1.45;
+    padding: 8px 12px;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px #30213a33;
+    pointer-events: none;
+}
+
+.cc-tip b {
+    display: block;
+    margin-bottom: 2px;
+}
+
+.cc-axis {
+    display: grid;
+    grid-template-columns: var(--cc-cols);
+    column-gap: 16px;
+    height: 20px;
+}
+
+.cc-ticks {
+    grid-column: 2;
+    position: relative;
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.cc-ticks span {
+    position: absolute;
+    top: 4px;
+    transform: translateX(-50%);
+}
+
+.cc-ticks span:first-child {
+    transform: none;
+}
+
+.cc-ticks span:last-child {
+    transform: translateX(-100%);
+}
+
+.cc-why {
+    margin: 4px 0 18px;
+    font-size: 14px;
+}
+
+.cc-why summary {
+    cursor: pointer;
+    color: var(--purple);
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.cc-why ul {
+    margin: 10px 0 0;
+    padding-left: 18px;
+    display: grid;
+    gap: 6px;
+    color: var(--ink);
+    line-height: 1.5;
+}
+
+/* Narrow screens: name and score on one line, the bar underneath */
+@media (max-width: 560px) {
+    .cat-chart {
+        --cc-cols: 1fr 56px;
+    }
+
+    .cc-row {
+        grid-template-columns: 1fr 56px;
+        grid-template-areas: "label value" "track track";
+        row-gap: 4px;
+        padding: 6px 0;
+    }
+
+    .cc-label { grid-area: label; }
+    .cc-value { grid-area: value; }
+
+    .cc-track {
+        grid-area: track;
+        height: 16px;
+        margin: 0 8px;
+    }
+
+    .cc-tip {
+        left: 8px;
+        max-width: calc(100% - 16px);
+    }
+
+    .cc-axis {
+        grid-template-columns: 1fr;
+        padding: 0 8px;
+    }
+
+    .cc-ticks {
+        grid-column: 1;
+    }
 }

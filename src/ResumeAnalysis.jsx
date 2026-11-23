@@ -28,20 +28,53 @@ function ScoreHead({ result, label }) {
   );
 }
 
-function CategoryBars({ categories }) {
+const TICKS = [0, 25, 50, 75, 100];
+
+/**
+ * Category scores as one chart: each bar is the share of that category's maximum, on a shared
+ * 0-100% axis. Hover or focus a row for its reason; all reasons are also in "Why these scores".
+ */
+function CategoryChart({ categories }) {
+  const [active, setActive] = useState(null);
   return (
-    <div className="cat-list">
-      {categories.map((c) => (
-        <div className={`cat-row ${c.applicable ? '' : 'na'}`} key={c.key}>
-          <div className="cat-top">
-            <b>{c.label}</b>
-            <span>{c.applicable ? `${c.score}/${c.max}` : 'N/A'}</span>
-          </div>
-          <div className="bar"><i style={{ width: c.applicable ? `${(c.score / c.max) * 100}%` : '0%' }} /></div>
-          <small>{c.reason}</small>
+    <>
+      <figure className="cat-chart" aria-label="Score by category, as a share of each category's maximum">
+        {categories.map((c) => {
+          const pct = c.applicable ? Math.round((c.score / c.max) * 100) : 0;
+          return (
+            <div
+              key={c.key}
+              className={`cc-row ${c.applicable ? '' : 'na'}`}
+              tabIndex={0}
+              aria-label={`${c.label}: ${c.applicable ? `${c.score} of ${c.max}` : 'not applicable'}. ${c.reason}`}
+              onMouseEnter={() => setActive(c.key)}
+              onMouseLeave={() => setActive(null)}
+              onFocus={() => setActive(c.key)}
+              onBlur={() => setActive(null)}
+            >
+              <span className="cc-label">{c.label}</span>
+              <span className="cc-track">{c.applicable && <i style={{ width: `${pct}%` }} />}</span>
+              <span className="cc-value">{c.applicable ? <>{c.score}<small>/{c.max}</small></> : 'N/A'}</span>
+              {active === c.key && c.reason && (
+                <span className="cc-tip" role="tooltip">
+                  <b>{c.label}{c.applicable ? ` · ${pct}%` : ''}</b>
+                  {c.reason}
+                </span>
+              )}
+            </div>
+          );
+        })}
+        <div className="cc-axis" aria-hidden="true">
+          <span className="cc-ticks">{TICKS.map((t) => <span key={t} style={{ left: `${t}%` }}>{t}%</span>)}</span>
         </div>
-      ))}
-    </div>
+      </figure>
+      <details className="cc-why">
+        <summary>Why these scores</summary>
+        <ul>
+          {categories.map((c) => <li key={c.key}><b>{c.label}:</b> {c.reason}</li>)}
+        </ul>
+      </details>
+    </>
   );
 }
 
@@ -66,7 +99,7 @@ function GeneralResult({ r }) {
   return (
     <>
       <ScoreHead result={r} label="General resume quality" />
-      <CategoryBars categories={r.categories} />
+      <CategoryChart categories={r.categories} />
       <div className="insights-cols">
         <div><p className="eyebrow">STRENGTHS</p><ul>{r.strengths.map((s) => <li key={s}>{s}</li>)}</ul></div>
         <div><p className="eyebrow">WEAKNESSES</p><ul>{r.weaknesses.map((s) => <li key={s}>{s}</li>)}</ul></div>
@@ -126,7 +159,7 @@ function RoleResult({ r }) {
           ? 'Compared against the job description you pasted.'
           : `No job description given, so this uses a general reference for ${r.role}. Paste a real JD for a sharper result.`}
       </p>
-      <CategoryBars categories={r.categories} />
+      <CategoryChart categories={r.categories} />
 
       <SkillGroup title="MATCHED SKILLS" items={r.skills.matched} tone="matched" note="Shown in a project or experience entry." />
       <SkillGroup title="PARTIALLY DEMONSTRATED" items={r.skills.partial} note="Listed on your resume, but no project or experience shows you using it." />
