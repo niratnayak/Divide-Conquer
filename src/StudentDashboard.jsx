@@ -3,7 +3,7 @@ import {
   CheckCircle2, X, Plus, Upload, ChartNoAxesColumn, Search, FileText, Lock
 } from 'lucide-react';
 import { api } from './api.js';
-import AiSuggestions from './AiSuggestions.jsx';
+import ResumeAnalysis from './ResumeAnalysis.jsx';
 import TagInput from './TagInput.jsx';
 import { usePolling } from './usePolling.js';
 
@@ -431,7 +431,7 @@ export function StudentDashboard({ jobs = [], user, onSelectJob }) {
         </section>
       </div>
 
-      <AiSuggestions version={aiVersion} />
+      <ResumeAnalysis version={aiVersion} hasResume={Boolean(resumeDisplayName)} />
 
       <section className="opportunities">
         <div className="section-heading">

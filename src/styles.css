@@ -2739,3 +2739,202 @@ button:disabled {
 .leaderboard-panel .disclaimer {
     font-size: 12px;
 }
+/* ---------- Resume analysis (general + role-specific) ---------- */
+.analysis-tabs {
+    display: flex;
+    gap: 6px;
+    background: var(--pale);
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 16px;
+    width: fit-content;
+}
+
+.analysis-tabs button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 0;
+    background: transparent;
+    color: var(--purple2);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.analysis-tabs button.active {
+    background: #fff;
+    color: var(--purple);
+    box-shadow: 0 1px 2px #39204420;
+}
+
+.role-form {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.role-form label {
+    display: grid;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink);
+}
+
+.role-form input,
+.role-form textarea {
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 9px 11px;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--ink);
+    background: #fff;
+    resize: vertical;
+}
+
+.analysis-run {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.analysis-run .small-primary:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+}
+
+.score-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 6px 0 18px;
+}
+
+.score-head b {
+    display: block;
+    font-size: 14px;
+}
+
+.score-head small {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 3px;
+}
+
+.score-big {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+    background: var(--pale);
+    border-radius: 14px;
+    padding: 10px 16px;
+}
+
+.score-big b {
+    font-size: 30px;
+    color: var(--purple);
+}
+
+.score-big small {
+    font-size: 12px;
+    margin: 0;
+}
+
+.score-head small.delta.up {
+    color: #39805c;
+    font-weight: 700;
+}
+
+.score-head small.delta.down {
+    color: #a75b5b;
+    font-weight: 700;
+}
+
+.cat-list {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.cat-row .cat-top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+.cat-row .cat-top span {
+    font-weight: 700;
+    color: var(--purple);
+}
+
+.cat-row small {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.5;
+    margin-top: 5px;
+}
+
+.cat-row.na {
+    opacity: .7;
+}
+
+.chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 6px 0 14px;
+}
+
+.skill-group small.muted {
+    display: block;
+    font-size: 11px;
+}
+
+.small-note {
+    font-size: 11px;
+    margin: 0 0 14px;
+}
+
+.line-fixes {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.line-fix {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+}
+
+.line-fix p {
+    margin: 0 0 6px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.line-fix .before {
+    color: #a75b5b;
+    text-decoration: line-through;
+    text-decoration-color: #a75b5b80;
+}
+
+.line-fix .after {
+    color: #39805c;
+    font-weight: 600;
+}
+
+.line-fix small {
+    color: var(--muted);
+    font-size: 11px;
+}

@@ -58,6 +58,12 @@ export const api = {
   getInsights: () => request('/profile/me/insights'),
   refreshInsights: () => request('/profile/me/insights/refresh', { method: 'POST' }),
 
+  // Resume analysis: general (Mode A) and role-specific (Mode B)
+  analysisRoles: () => request('/analysis/roles'),
+  latestAnalyses: () => request('/analysis/latest'),
+  analyseGeneral: () => request('/analysis/general', { method: 'POST' }),
+  analyseRole: (role, jd) => request('/analysis/role', { method: 'POST', body: { role, jd } }),
+
   myApplications: () => request('/applications/me'),
   demand: () => request('/market/demand'),
 };

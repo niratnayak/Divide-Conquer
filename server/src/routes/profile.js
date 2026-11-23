@@ -11,12 +11,11 @@ import { asyncHandler, HttpError } from '../utils/asyncHandler.js';
 
 const router = Router();
 
-// Asks for AI suggestions in the background (runs only if the inputs changed)
-// and returns the profile with the up-to-date status.
+// Returns the saved profile. The old profile-wide AI suggestions are no longer started
+// automatically here: resume analysis (routes/analysis.js) runs when the student asks for it.
 async function respondWithAnalysis(res, profileId, extra = {}) {
-  const outcome = await queueAnalysis(profileId);
   const fresh = await StudentProfile.findById(profileId);
-  res.json({ profile: { ...fresh.toPublic(), ...extra }, ai: outcome });
+  res.json({ profile: { ...fresh.toPublic(), ...extra } });
 }
 
 async function getOrCreateProfile(userId) {

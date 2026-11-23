@@ -40,6 +40,29 @@ All routes except register/login need `Authorization: Bearer <token>`.
 | GET | /api/applications/me | student | My applications |
 | PATCH | /api/applications/:id | tpo | `{ status: applied\|shortlisted\|rejected\|selected }` |
 | GET | /api/market/demand | any | Most-requested skills across open jobs |
+| GET | /api/analysis/roles | student | Role dropdown options |
+| GET | /api/analysis/latest | student | Latest general and role-specific results |
+| POST | /api/analysis/general | student | Mode A: general resume quality score (no job involved) |
+| POST | /api/analysis/role | student | Mode B: `{ role, jd? }` → role compatibility score |
+
+## Resume analysis
+
+Both modes read the uploaded resume's text. Each run is one Groq call; running again on the same
+resume and target returns the saved result (`cached: true`) without a call.
+
+- **General (Mode A)** out of 100: formatting 15, summary 10, skills presentation 15, projects 20,
+  experience 15, impact 15, grammar 10.
+- **Role (Mode B)** out of 100: technical skills 30, project relevance 25, experience relevance 15,
+  keywords 10, education 10, impact 10. A pasted JD takes priority; without one, the role's entry in
+  `src/config/roles.json` is used. A custom role needs a JD.
+- Formatting, skills presentation, impact, keywords and technical skills are scored by rules in
+  `src/services/resumeScoring.js`; the AI scores the rest, each capped at its maximum, and the total is
+  added up in code.
+- No internship/work experience → that category is marked N/A and its weight is shared by the others.
+- Skills are shown as matched (used in a project/experience), partially demonstrated (only listed),
+  claimed in the profile but not on the resume, or not found in the resume.
+- AI line rewrites are only shown if the quoted line really is in the resume; new numbers become `[X]`
+  placeholders and rewrites that add a skill the resume never mentions are dropped.
 
 ## Match score (built-in)
 

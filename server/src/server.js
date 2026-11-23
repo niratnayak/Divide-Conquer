@@ -7,6 +7,7 @@ import profileRoutes from './routes/profile.js';
 import jobRoutes from './routes/jobs.js';
 import applicationRoutes from './routes/applications.js';
 import marketRoutes from './routes/market.js';
+import analysisRoutes from './routes/analysis.js';
 import { notFound, errorHandler } from './middleware/error.js';
 import { resetStuckAnalyses } from './services/insights.js';
 import { isLLMConfigured, llmConfig } from './services/llm.js';
@@ -29,6 +30,7 @@ app.use('/api/profile', profileRoutes);
 app.use('/api/jobs', jobRoutes);
 app.use('/api/applications', applicationRoutes);
 app.use('/api/market', marketRoutes);
+app.use('/api/analysis', analysisRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

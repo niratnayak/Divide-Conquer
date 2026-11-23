@@ -1,0 +1,83 @@
+{
+  "_note": "Competency reference used by role-specific analysis when no job description is pasted. Edit freely: skills are matched as whole words, case-insensitive.",
+  "roles": {
+    "Software Engineer": {
+      "required": ["Data Structures", "Algorithms", "Git", "SQL", "OOP"],
+      "preferred": ["Java", "Python", "C++", "REST", "Testing", "Linux"],
+      "keywords": ["problem solving", "debugging", "code review", "scalable", "API", "version control"],
+      "education": "B.E./B.Tech in Computer, IT or a related branch"
+    },
+    "Frontend Developer": {
+      "required": ["HTML", "CSS", "JavaScript", "React", "Git"],
+      "preferred": ["TypeScript", "Next.js", "Tailwind", "Testing", "REST", "Figma"],
+      "keywords": ["responsive", "UI", "components", "accessibility", "performance", "cross-browser"],
+      "education": "B.E./B.Tech in Computer, IT or a related branch"
+    },
+    "Backend Developer": {
+      "required": ["Node.js", "SQL", "REST", "Git", "Databases"],
+      "preferred": ["Java", "Python", "Express", "MongoDB", "Docker", "Redis", "Testing"],
+      "keywords": ["API", "authentication", "server", "scalable", "caching", "microservices"],
+      "education": "B.E./B.Tech in Computer, IT or a related branch"
+    },
+    "Full Stack Developer": {
+      "required": ["JavaScript", "React", "Node.js", "SQL", "REST", "Git"],
+      "preferred": ["TypeScript", "MongoDB", "Express", "Next.js", "Docker", "Testing"],
+      "keywords": ["frontend", "backend", "end-to-end", "deployment", "API", "full stack"],
+      "education": "B.E./B.Tech in Computer, IT or a related branch"
+    },
+    "Data Analyst": {
+      "required": ["SQL", "Excel", "Python", "Data Analysis", "Statistics"],
+      "preferred": ["Power BI", "Tableau", "Pandas", "NumPy", "Data Visualization"],
+      "keywords": ["dashboard", "insights", "reporting", "data cleaning", "KPI", "trends"],
+      "education": "Degree in Engineering, Statistics, Mathematics or a related field"
+    },
+    "Data Scientist": {
+      "required": ["Python", "Machine Learning", "Statistics", "SQL", "Pandas"],
+      "preferred": ["Scikit-Learn", "Deep Learning", "TensorFlow", "PyTorch", "NumPy", "Data Visualization"],
+      "keywords": ["model", "prediction", "feature engineering", "experiment", "accuracy", "dataset"],
+      "education": "Degree in Computer Science, Statistics, Mathematics or a related field"
+    },
+    "Machine Learning Engineer": {
+      "required": ["Python", "Machine Learning", "Deep Learning", "PyTorch", "Git"],
+      "preferred": ["TensorFlow", "Scikit-Learn", "Docker", "MLOps", "AWS", "NLP", "Computer Vision"],
+      "keywords": ["training", "inference", "model deployment", "pipeline", "accuracy", "dataset"],
+      "education": "B.E./B.Tech in Computer, IT, AI/ML or a related branch"
+    },
+    "AI Engineer": {
+      "required": ["Python", "Machine Learning", "LLM", "APIs", "Git"],
+      "preferred": ["NLP", "PyTorch", "LangChain", "RAG", "Vector Database", "FastAPI", "Docker"],
+      "keywords": ["prompt", "agent", "embedding", "fine-tuning", "inference", "evaluation"],
+      "education": "B.E./B.Tech in Computer, IT, AI/ML or a related branch"
+    },
+    "DevOps Engineer": {
+      "required": ["Linux", "Docker", "CI/CD", "Git", "Scripting"],
+      "preferred": ["Kubernetes", "AWS", "Azure", "Terraform", "Jenkins", "Monitoring", "Python"],
+      "keywords": ["pipeline", "deployment", "automation", "infrastructure", "uptime", "containers"],
+      "education": "B.E./B.Tech in Computer, IT or a related branch"
+    },
+    "Cloud Engineer": {
+      "required": ["AWS", "Linux", "Networking", "Cloud Computing", "Docker"],
+      "preferred": ["Azure", "GCP", "Terraform", "Kubernetes", "Python", "Security"],
+      "keywords": ["infrastructure", "deployment", "scalability", "IAM", "VPC", "serverless"],
+      "education": "B.E./B.Tech in Computer, IT, Electronics or a related branch"
+    },
+    "Cybersecurity Analyst": {
+      "required": ["Networking", "Linux", "Cybersecurity", "Security", "Python"],
+      "preferred": ["SIEM", "Wireshark", "Penetration Testing", "OWASP", "Cryptography", "Firewalls"],
+      "keywords": ["vulnerability", "threat", "incident response", "risk", "compliance", "CTF"],
+      "education": "B.E./B.Tech in Computer, IT or a related branch; security certifications help"
+    },
+    "UI/UX Designer": {
+      "required": ["Figma", "User Research", "Wireframing", "Prototyping", "UI Design"],
+      "preferred": ["Adobe XD", "Usability Testing", "Design Systems", "HTML", "CSS", "Accessibility"],
+      "keywords": ["user flow", "persona", "usability", "interaction", "visual design", "portfolio"],
+      "education": "Any degree; a design portfolio matters most"
+    },
+    "Product Manager": {
+      "required": ["Product Management", "Communication", "Data Analysis", "Roadmap", "User Research"],
+      "preferred": ["SQL", "Agile", "Jira", "A/B Testing", "Figma", "Excel"],
+      "keywords": ["stakeholders", "requirements", "prioritization", "metrics", "launch", "customer"],
+      "education": "Any degree; engineering or business background common"
+    }
+  }
+}
