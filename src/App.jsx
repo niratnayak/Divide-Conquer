@@ -11,7 +11,7 @@ export function Brand() {
   return (
     <div className="brand">
       <span className="brand-icon"><Sparkles size={19} /></span>
-      <span><b>ResumeIQ</b><small>PLACEMENT INTELLIGENCE</small></span>
+      <span><b>ResumeIQ</b><small>AI RESUME INSIGHTS</small></span>
     </div>
   );
 }
@@ -19,6 +19,34 @@ export function Brand() {
 export function Tag({ children, tone = '' }) {
   return <span className={`tag ${tone}`}>{children}</span>;
 }
+
+// Sign-in page headings for each role, when signing in or creating an account
+const LOGIN_COPY = {
+  student: {
+    signIn: {
+      eyebrow: 'WELCOME BACK',
+      title: 'Your resume, one step better.',
+      text: 'Sign in to analyse your resume, see what to improve, and track your score as it grows.',
+    },
+    register: {
+      eyebrow: 'GET STARTED',
+      title: 'Build a resume that gets noticed.',
+      text: 'Create your account, upload your resume and get instant AI feedback on how to make it stronger.',
+    },
+  },
+  officer: {
+    signIn: {
+      eyebrow: 'STUDENT SKILL INSIGHTS',
+      title: 'Discover talent. Explore skills. Find the right students.',
+      text: 'Easily explore student profiles, identify key skills, and discover talent based on their capabilities.',
+    },
+    register: {
+      eyebrow: 'FOR PLACEMENT OFFICERS',
+      title: 'Set up your placement workspace.',
+      text: 'Create your account to explore student profiles and see the skills behind every resume.',
+    },
+  },
+};
 
 export function Login({ onLogin }) {
   const [role, setRole] = useState('Student');
@@ -70,36 +98,24 @@ export function Login({ onLogin }) {
     }
   };
 
+  const copy = LOGIN_COPY[role === 'Placement officer' ? 'officer' : 'student'][register ? 'register' : 'signIn'];
+
   return (
     <main className="login-shell">
       <section className="login-hero">
         <Brand />
         <div className="hero-copy">
-          <p className="eyebrow light">SKILL-BASED CAREER MATCHING</p>
-          <h1>Right skills. Right roles. Right away.</h1>
-          <p>ResumeIQ analyses your profile against real job requirements and shows you where you fit best.</p>
+          <p className="eyebrow light">AI-POWERED RESUME ANALYSIS</p>
+          <h1>Know your resume. Grow your skills.</h1>
+          <p>ResumeIQ scores resumes, shows students exactly what to improve, and helps placement officers find the right talent.</p>
         </div>
-        <div className="hero-foot">© 2026 ResumeIQ · Placement Intelligence</div>
+        <div className="hero-foot">© 2026 ResumeIQ · AI Resume Insights</div>
       </section>
       <section className="login-panel">
         <div className="login-form-wrap">
-          <p className="eyebrow">
-            {role === 'Placement officer' ? 'STUDENT SKILL INSIGHTS' : 'WELCOME BACK'}
-          </p>
-
-          <h2>
-            {register
-              ? 'Create your workspace.'
-              : role === 'Placement officer'
-                ? 'Discover talent. Explore skills. Find the right students.'
-                : 'Your next role starts here.'}
-          </h2>
-
-          <p className="muted">
-            {role === 'Placement officer'
-              ? 'Easily explore student profiles, identify key skills, and discover talent based on their capabilities.'
-              : 'Sign in to your placement workspace and discover opportunities.'}
-          </p>
+          <p className="eyebrow">{copy.eyebrow}</p>
+          <h2>{copy.title}</h2>
+          <p className="muted">{copy.text}</p>
 
           <div className="role-switch">
             <button className={role === 'Student' ? 'selected' : ''} onClick={() => setRole('Student')}>
@@ -248,7 +264,7 @@ export function App() {
           user={user}
         />
       )}
-      <footer className="app-footer">ResumeIQ <span>·</span> Placement intelligence</footer>
+      <footer className="app-footer">ResumeIQ <span>·</span> AI resume insights</footer>
     </div>
   );
 }
