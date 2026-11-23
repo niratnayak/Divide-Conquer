@@ -6,7 +6,6 @@ import StudentProfile from '../models/StudentProfile.js';
 import { chatJSON, isLLMConfigured } from './llm.js';
 import { buildGeneral, buildRole, roleReference, resumeProblem } from './resumeScoring.js';
 import { HttpError } from '../utils/asyncHandler.js';
-import { buildDocx, fillBlanks, generateTailored, listBlanks } from './tailor.js';
 
 const PROMPT_VERSION = 'a1'; // change to invalidate every saved analysis
 const RESUME_CHARS_FOR_AI = 6000; // stays inside Groq's free per-minute token limit
@@ -204,43 +203,4 @@ export async function latestAnalyses(userId) {
     general: general ? serializeAnalysis(general, profile) : null,
     role: role ? serializeAnalysis(role, profile) : null,
   };
-}
-
-/** An analysis that belongs to this student and still matches their current resume. */
-async function ownAnalysis(userId, analysisId) {
-  const profile = await getProfile(userId);
-  const doc = await Analysis.findOne({ _id: analysisId, profile: profile._id });
-  if (!doc) throw new HttpError(404, 'Analysis not found.');
-  if (serializeAnalysis(doc, profile).stale) {
-    throw new HttpError(409, "You've uploaded a new resume since this analysis. Run the analysis again first.");
-  }
-  return { profile, doc };
-}
-
-/** Tailored resume for an analysis. Made once with one AI call, then reused. */
-export async function tailorAnalysis(userId, analysisId) {
-  const { profile, doc } = await ownAnalysis(userId, analysisId);
-  if (!doc.tailored) {
-    if (!isLLMConfigured()) throw new HttpError(424, 'AI analysis is not set up on the server yet (GROQ_API_KEY is missing).');
-    try {
-      const { tailored } = await generateTailored({
-        resumeText: profile.resumeText, mode: doc.mode, role: doc.role, jd: doc.jdText, result: doc.result,
-      });
-      doc.tailored = tailored;
-      await doc.save();
-    } catch (err) {
-      throw new HttpError(/rate limit/i.test(err.message) ? 429 : 424, `Could not create the tailored resume: ${err.message}`);
-    }
-  }
-  return { tailored: doc.tailored, blanks: listBlanks(doc.tailored) };
-}
-
-/** The tailored resume as a Word file, with the student's values in the blanks. */
-export async function tailoredDocx(userId, analysisId, values) {
-  const { doc } = await ownAnalysis(userId, analysisId);
-  if (!doc.tailored) throw new HttpError(400, 'Generate the tailored version first.');
-  const filled = fillBlanks(doc.tailored, Array.isArray(values) ? values.slice(0, 100) : []);
-  const base = (doc.tailored.name || 'resume').replace(/[^A-Za-z0-9]+/g, '_');
-  const suffix = doc.mode === 'role' ? `_${doc.role.replace(/[^A-Za-z0-9]+/g, '_')}` : '';
-  return { buffer: await buildDocx(filled), filename: `${base}_tailored${suffix}.docx` };
 }

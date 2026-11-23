@@ -44,8 +44,6 @@ All routes except register/login need `Authorization: Bearer <token>`.
 | GET | /api/analysis/latest | student | Latest general and role-specific results |
 | POST | /api/analysis/general | student | Mode A: general resume quality score (no job involved) |
 | POST | /api/analysis/role | student | Mode B: `{ role, jd? }` → role compatibility score |
-| POST | /api/analysis/:id/tailor | student | Tailored resume built from that analysis (one AI call, then saved) |
-| POST | /api/analysis/:id/tailor/docx | student | `{ values }` → tailored resume as a Word file, blanks filled in |
 
 ## Resume analysis
 
@@ -65,15 +63,6 @@ resume and target returns the saved result (`cached: true`) without a call.
   claimed in the profile but not on the resume, or not found in the resume.
 - AI line rewrites are only shown if the quoted line really is in the resume; new numbers become `[X]`
   placeholders and rewrites that add a skill the resume never mentions are dropped.
-
-### Tailored resume
-
-After reading an analysis, a student can generate a tailored version of their resume from it
-(`src/services/tailor.js`). It is made once per analysis with one Groq call and saved. Every part is checked
-against the resume text: skills must be in the resume, each bullet must be based on a real resume line,
-numbers not in that line become blanks such as `[X%]`, and a rewrite that names a skill, tool or anything
-else the resume never mentions falls back to the student's own line. The student fills the blanks (an empty
-one is left out) and downloads a `.docx`.
 
 ## Match score (built-in)
 
