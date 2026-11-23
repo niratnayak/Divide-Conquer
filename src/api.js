@@ -45,13 +45,6 @@ export const api = {
     return request('/profile/me/resume', { method: 'POST', form });
   },
 
-  // status: 'all' (default) | 'Open' | 'Closed'
-  apply: (id) => request(`/jobs/${id}/apply`, { method: 'POST' }),
-
-  // AI suggestions (cached in the database; Groq is only called when something changed)
-  getInsights: () => request('/profile/me/insights'),
-  refreshInsights: () => request('/profile/me/insights/refresh', { method: 'POST' }),
-
   // Placement officer: students ranked by evidence for the skills searched
   studentDepartments: () => request('/students/departments'),
   searchStudents: (filters) => request('/students/search', { method: 'POST', body: filters }),
@@ -72,5 +65,4 @@ export const api = {
   analyseGeneral: () => request('/analysis/general', { method: 'POST' }),
   analyseRole: (role, jd) => request('/analysis/role', { method: 'POST', body: { role, jd } }),
 
-  myApplications: () => request('/applications/me'),
 };

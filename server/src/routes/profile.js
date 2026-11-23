@@ -5,15 +5,12 @@ import User from '../models/User.js';
 import { requireAuth, requireRole } from '../middleware/auth.js';
 import { resumeUpload } from '../middleware/upload.js';
 import { normalizeList, extractSkillsFromText, parseResumeText } from '../services/skills.js';
-import { queueAnalysis, isStale } from '../services/insights.js';
 import { resumeProblem } from '../services/resumeScoring.js';
-import { isLLMConfigured } from '../services/llm.js';
 import { asyncHandler, HttpError } from '../utils/asyncHandler.js';
 
 const router = Router();
 
-// Returns the saved profile. The old profile-wide AI suggestions are no longer started
-// automatically here: resume analysis (routes/analysis.js) runs when the student asks for it.
+// Returns the saved profile. Resume analysis (routes/analysis.js) runs only when the student asks for it.
 async function respondWithAnalysis(res, profileId, extra = {}) {
   const fresh = await StudentProfile.findById(profileId);
   res.json({ profile: { ...fresh.toPublic(), ...extra } });
@@ -97,35 +94,6 @@ router.post(
     await respondWithAnalysis(res, profile._id);
   })
 );
-
-// GET /api/profile/me/insights — cached AI suggestions (no Groq call). Poll while status is "pending".
-router.get('/me/insights', requireAuth, requireRole('student'), asyncHandler(async (req, res) => {
-  const profile = await getOrCreateProfile(req.user.id);
-  const insights = profile.toPublic().aiInsights;
-  res.json({
-    aiEnabled: isLLMConfigured(),
-    insights,
-    // true when new jobs were posted or the profile changed since these suggestions were made
-    stale: insights.status === 'ready' ? await isStale(profile._id) : false,
-    extractedSkills: profile.extractedSkills,
-  });
-}));
-
-// POST /api/profile/me/insights/refresh — calls Groq only if something changed since last time
-router.post('/me/insights/refresh', requireAuth, requireRole('student'), asyncHandler(async (req, res) => {
-  if (!isLLMConfigured()) throw new HttpError(503, 'AI suggestions are not set up on the server yet.');
-  const profile = await getOrCreateProfile(req.user.id);
-  const outcome = await queueAnalysis(profile._id);
-  if (outcome === 'limit') {
-    throw new HttpError(429, "You've reached today's limit for AI suggestions. Try again tomorrow.");
-  }
-  const fresh = await StudentProfile.findById(profile._id);
-  res.json({
-    ai: outcome,
-    insights: fresh.toPublic().aiInsights,
-    message: outcome === 'cached' ? 'Your suggestions are already up to date.' : 'Analysing your profile…',
-  });
-}));
 
 // GET /api/profile/:userId/resume — the student themself or any placement officer
 router.get('/:userId/resume', requireAuth, asyncHandler(async (req, res) => {
