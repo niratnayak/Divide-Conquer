@@ -7,28 +7,56 @@ import { X, Plus } from 'lucide-react';
  * `suggestions` are shown as one-click "+ Skill" chips (e.g. skills found in the resume).
  */
 export default function TagInput({
-  label, values, onChange, placeholder, hint, suggestions = [], suggestionLabel, max = 30,
+  label,
+  values = [],
+  onChange,
+  placeholder,
+  hint,
+  suggestions = [],
+  suggestionLabel,
+  max = 30,
+  maxTagLength = 200,
+  onlyEnter = false,
 }) {
   const [draft, setDraft] = useState('');
   const has = (v) => values.some((x) => x.toLowerCase() === v.toLowerCase());
 
   const add = (raw) => {
-    const parts = String(raw).split(',').map((s) => s.trim().slice(0, 60)).filter(Boolean);
-    const next = [...values];
-    for (const p of parts) {
+    if (!raw) return;
+    const items = onlyEnter
+      ? [String(raw).trim()]
+      : String(raw).split(',').map((s) => s.trim());
+
+    const clean = items
+      .map((s) => s.slice(0, maxTagLength))
+      .filter(Boolean);
+
+    if (!clean.length) return;
+
+    const current = Array.isArray(values) ? values : [];
+    const next = [...current];
+
+    for (const p of clean) {
       if (next.length >= max) break;
-      if (!next.some((x) => x.toLowerCase() === p.toLowerCase())) next.push(p);
+      if (!next.some((x) => x.toLowerCase() === p.toLowerCase())) {
+        next.push(p);
+      }
     }
-    if (next.length !== values.length) onChange(next);
+
+    if (next.length !== current.length) {
+      onChange(next);
+    }
     setDraft('');
   };
 
   const remove = (v) => onChange(values.filter((x) => x !== v));
 
   const onKeyDown = (e) => {
-    if (e.key === 'Enter' || e.key === ',') {
+    if (e.key === 'Enter' || (!onlyEnter && e.key === ',')) {
       e.preventDefault();
-      if (draft.trim()) add(draft);
+      if (draft.trim()) {
+        add(draft);
+      }
     } else if (e.key === 'Backspace' && !draft && values.length) {
       remove(values[values.length - 1]);
     }
@@ -49,7 +77,14 @@ export default function TagInput({
         <input
           value={draft}
           placeholder={values.length ? '' : placeholder}
-          onChange={(e) => (e.target.value.includes(',') ? add(e.target.value) : setDraft(e.target.value))}
+          onChange={(e) => {
+            const val = e.target.value;
+            if (!onlyEnter && val.includes(',')) {
+              add(val);
+            } else {
+              setDraft(val);
+            }
+          }}
           onKeyDown={onKeyDown}
           onBlur={() => draft.trim() && add(draft)}
           disabled={values.length >= max}

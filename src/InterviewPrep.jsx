@@ -104,6 +104,7 @@ function Setup({ roles, aiEnabled, hasResume, onStart, onCancel }) {
         </button>
         {onCancel && <button type="button" className="text-button" onClick={onCancel} disabled={busy}>Back to my session</button>}
         {!hasResume && <small className="muted">Upload your resume above first.</small>}
+        {hasResume && !roleToSend && <small className="muted">Select or enter a role above.</small>}
         {!aiEnabled && <small className="muted">AI isn't set up on the server yet.</small>}
         {needsJd && <small className="muted">Paste the job description for a custom role.</small>}
       </div>

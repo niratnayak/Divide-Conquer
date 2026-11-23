@@ -17,7 +17,7 @@ export function StudentDashboard({ user, onSelectJob }) {
   const [linkedin, setLinkedin] = useState('');
   const [skills, setSkills] = useState([]);
   const [certifications, setCertifications] = useState([]);
-  const [projects, setProjects] = useState(['']);
+  const [projects, setProjects] = useState([]);
   const [resume, setResume] = useState(null);
   const [extracted, setExtracted] = useState([]);
   const [saved, setSaved] = useState(false);
@@ -43,9 +43,7 @@ export function StudentDashboard({ user, onSelectJob }) {
         setDepartment(profile.department || '');
         setSkills(profile.skills || []);
         setCertifications(profile.certifications || []);
-        if (profile.projects && profile.projects.length > 0) {
-          setProjects(profile.projects);
-        }
+        setProjects(Array.isArray(profile.projects) ? profile.projects.filter(Boolean) : []);
         setResume(profile.resume);
         setExtracted(profile.extractedSkills || []);
       })
@@ -119,7 +117,7 @@ export function StudentDashboard({ user, onSelectJob }) {
     setSaving(true);
 
     try {
-      const cleanProjects = projects.map(p => p.trim()).filter(Boolean);
+      const cleanProjects = projects.map(p => String(p).trim()).filter(Boolean);
       const parsedCgpa = (cgpa === '' || cgpa === null || cgpa === undefined) ? null : Number(cgpa);
       const { profile } = await api.updateProfile({
         name: name.trim(),
@@ -138,9 +136,7 @@ export function StudentDashboard({ user, onSelectJob }) {
         setDepartment(profile.department || '');
         setSkills(profile.skills || []);
         setCertifications(profile.certifications || []);
-        if (profile.projects && profile.projects.length > 0) {
-          setProjects(profile.projects);
-        }
+        setProjects(Array.isArray(profile.projects) ? profile.projects.filter(Boolean) : []);
         setResume(profile.resume);
         setExtracted(profile.extractedSkills || []);
       }
@@ -311,48 +307,16 @@ export function StudentDashboard({ user, onSelectJob }) {
             max={20}
           />
 
-          <div className="project-links-full">
-            <label>Project Links</label>
-            {projects.map((project, index) => (
-              <div className="input-add" key={index}>
-                <input
-                  type="url"
-                  placeholder="https://github.com/username/project"
-                  value={project}
-                  onChange={e =>
-                    setProjects(current =>
-                      current.map((item, i) =>
-                        i === index ? e.target.value : item
-                      )
-                    )
-                  }
-                />
-                {projects.length > 1 && (
-                  <button
-                    type="button"
-                    className="remove-btn"
-                    title="Remove link"
-                    aria-label="Remove project"
-                    onClick={() =>
-                      setProjects(current => current.filter((_, i) => i !== index))
-                    }
-                  >
-                    <X size={15} />
-                  </button>
-                )}
-                {index === projects.length - 1 && (
-                  <button
-                    type="button"
-                    aria-label="Add another project"
-                    title="Add project link"
-                    onClick={() => setProjects(current => [...current, ''])}
-                  >
-                    <Plus size={15} />
-                  </button>
-                )}
-              </div>
-            ))}
-          </div>
+          <TagInput
+            label="Project Links"
+            values={projects}
+            onChange={(v) => { setProjects(v); setSaved(false); }}
+            placeholder="e.g. https://github.com/username/project — press Enter after each"
+            hint="Add your project links or GitHub repositories. Press Enter after each link."
+            max={20}
+            maxTagLength={300}
+            onlyEnter={true}
+          />
 
           {saved && <p className="inline-success" style={{ marginTop: '8px' }}><CheckCircle2 size={14} /> Profile changes saved to database.</p>}
           {saveError && <p className="field-error" style={{ marginTop: '8px' }}>{saveError}</p>}

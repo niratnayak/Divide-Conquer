@@ -367,6 +367,7 @@ export default function ResumeAnalysis({ version = 0, hasResume = false }) {
           {busy ? <><Loader2 size={12} className="spin" /> Analysing…</> : <><Sparkles size={12} /> Analyse</>}
         </button>
         {!hasResume && <small className="muted">Upload your resume above first.</small>}
+        {hasResume && tab === 'role' && !roleToSend && <small className="muted">Select or enter a target role above.</small>}
         {!aiEnabled && <small className="muted">AI analysis isn't set up on the server yet.</small>}
       </div>
 
