@@ -213,7 +213,6 @@ export function StudentDashboard({ user, onSelectJob }) {
           <div className="panel-heading">
             <div>
               <b>Your profile</b>
-              <small>Saved in MongoDB</small>
             </div>
             <button className="small-primary" onClick={handleSave} disabled={saving}>
               {saving ? 'Saving…' : 'Save changes'}
