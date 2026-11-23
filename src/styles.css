@@ -3174,3 +3174,242 @@ button:disabled {
         order: -1;
     }
 }
+
+/* Result cards: line-by-line improvements and recommendations */
+.result-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 22px;
+    margin: 22px 0;
+    box-shadow: 0 2px 8px #3920440d;
+}
+
+.result-card-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.result-card-icon {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    background: var(--pale);
+    color: var(--purple);
+}
+
+.result-card-head h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 17px;
+    margin: 0;
+    color: var(--ink);
+}
+
+.result-card-head p {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 3px 0 0;
+    line-height: 1.45;
+}
+
+.result-card-count {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--purple);
+    background: var(--pale);
+    border-radius: 999px;
+    padding: 1px 9px;
+}
+
+mark.blank {
+    background: #f3e2b5;
+    color: var(--ink);
+    border-radius: 4px;
+    padding: 0 3px;
+    font-weight: 700;
+}
+
+/* Line-by-line improvements */
+.fix-list,
+.rec-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+}
+
+.fix-item {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+}
+
+.fix-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.fix-num,
+.rec-num {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--purple);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.fix-issue {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.fix-pair {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: stretch;
+    gap: 10px;
+}
+
+.fix-arrow {
+    align-self: center;
+    color: var(--lav);
+}
+
+.fix-col {
+    border-radius: 10px;
+    padding: 10px 12px;
+}
+
+.fix-col.before {
+    background: #f7f3f8;
+}
+
+.fix-col.after {
+    background: #eef7f1;
+}
+
+.fix-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    min-height: 22px;
+    margin-bottom: 4px;
+}
+
+.fix-col.after .fix-label {
+    color: #39805c;
+}
+
+.fix-col p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink);
+}
+
+.fix-col.before p {
+    color: #6d5f74;
+}
+
+.fix-copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border: 1px solid #39805c55;
+    background: #fff;
+    color: #2f6e4d;
+    border-radius: 7px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: none;
+    cursor: pointer;
+}
+
+.fix-copy:hover {
+    background: #e2f1e8;
+}
+
+/* Recommendations */
+.rec-item {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 12px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--lav);
+    border-radius: 12px;
+    background: #fff;
+}
+
+.rec-item.high { border-left-color: #b4534f; }
+.rec-item.medium { border-left-color: #c58a2c; }
+.rec-item.low { border-left-color: #39805c; }
+
+.rec-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+}
+
+.rec-top b {
+    font-size: 15px;
+    color: var(--ink);
+}
+
+.rec-item p {
+    margin: 4px 0 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: #5e5066;
+}
+
+.rec-pill {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 9px;
+    border-radius: 999px;
+}
+
+.rec-pill.high { background: #fbe9e9; color: #8c3b3b; }
+.rec-pill.medium { background: #fbf0dc; color: #7a5413; }
+.rec-pill.low { background: #e6f4ec; color: #2f6e4d; }
+
+@media (max-width: 640px) {
+    .result-card {
+        padding: 16px;
+    }
+
+    .fix-pair {
+        grid-template-columns: 1fr;
+    }
+
+    .fix-arrow {
+        justify-self: center;
+        transform: rotate(90deg);
+    }
+}

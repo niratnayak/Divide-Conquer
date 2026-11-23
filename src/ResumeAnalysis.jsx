@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Sparkles, Loader2, Lightbulb, AlertTriangle, ArrowRight, Target, FileSearch } from 'lucide-react';
+import { Sparkles, Loader2, AlertTriangle, ArrowRight, Target, FileSearch, PenLine, ListChecks, Copy, Check } from 'lucide-react';
 import { api } from './api.js';
 
 function Tag({ children, tone = '' }) {
@@ -8,7 +8,6 @@ function Tag({ children, tone = '' }) {
 
 const CUSTOM = 'Other / Custom Role';
 const PRIORITY_ORDER = { high: 0, medium: 1, low: 2 };
-const PRIORITY_TONE = { high: 'missing', medium: '', low: 'matched' };
 
 function ScoreHead({ result, label }) {
   const delta = result.previousScore != null ? result.score - result.previousScore : null;
@@ -78,20 +77,103 @@ function CategoryChart({ categories }) {
   );
 }
 
-function Actions({ items }) {
+const PRIORITY_LABEL = { high: 'High', medium: 'Medium', low: 'Low' };
+
+/** A titled card for one block of results. */
+function ResultCard({ icon: Icon, title, subtitle, count, children }) {
+  return (
+    <section className="result-card">
+      <header className="result-card-head">
+        <span className="result-card-icon"><Icon size={18} /></span>
+        <div>
+          <h3>{title}{count != null && <span className="result-card-count">{count}</span>}</h3>
+          {subtitle && <p>{subtitle}</p>}
+        </div>
+      </header>
+      {children}
+    </section>
+  );
+}
+
+/** Text with its [X] blanks highlighted. */
+function Marked({ text }) {
+  return String(text).split(/(\[[^\]]+\])/).map((part, i) => (
+    /^\[[^\]]+\]$/.test(part) ? <mark className="blank" key={i}>{part}</mark> : part
+  ));
+}
+
+function CopyButton({ text }) {
+  const [copied, setCopied] = useState(false);
+  const copy = () => {
+    navigator.clipboard?.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    }).catch(() => {});
+  };
+  return (
+    <button type="button" className="fix-copy" onClick={copy} aria-label="Copy suggested line">
+      {copied ? <><Check size={13} /> Copied</> : <><Copy size={13} /> Copy</>}
+    </button>
+  );
+}
+
+function LineFixes({ items }) {
   if (!items?.length) return null;
   return (
-    <div className="suggestion-list">
-      {[...items].sort((a, b) => (PRIORITY_ORDER[a.priority] ?? 1) - (PRIORITY_ORDER[b.priority] ?? 1)).map((s) => (
-        <div className="suggestion" key={s.title}>
-          <Lightbulb size={15} />
-          <div>
-            <b>{s.title} <Tag tone={PRIORITY_TONE[s.priority] || ''}>{s.priority} priority</Tag></b>
-            <p>{s.detail}</p>
-          </div>
-        </div>
-      ))}
-    </div>
+    <ResultCard
+      icon={PenLine}
+      title="Line-by-line improvements"
+      subtitle="Replace [X] blanks with your real numbers. If you don't know one, leave it out rather than guess."
+      count={items.length}
+    >
+      <ol className="fix-list">
+        {items.map((s, i) => (
+          <li className="fix-item" key={s.original}>
+            <div className="fix-head">
+              <span className="fix-num">{i + 1}</span>
+              <span className="fix-issue">{s.issue}</span>
+            </div>
+            <div className="fix-pair">
+              <div className="fix-col before">
+                <span className="fix-label">Current</span>
+                <p>{s.original}</p>
+              </div>
+              <ArrowRight size={16} className="fix-arrow" aria-hidden="true" />
+              <div className="fix-col after">
+                <span className="fix-label">Suggested <CopyButton text={s.suggestion} /></span>
+                <p><Marked text={s.suggestion} /></p>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </ResultCard>
+  );
+}
+
+function Actions({ items, title }) {
+  if (!items?.length) return null;
+  const sorted = [...items].sort((a, b) => (PRIORITY_ORDER[a.priority] ?? 1) - (PRIORITY_ORDER[b.priority] ?? 1));
+  return (
+    <ResultCard icon={ListChecks} title={title} subtitle="Most important first. Start at the top." count={items.length}>
+      <ol className="rec-list">
+        {sorted.map((s, i) => {
+          const p = PRIORITY_LABEL[s.priority] ? s.priority : 'medium';
+          return (
+            <li className={`rec-item ${p}`} key={s.title}>
+              <span className="rec-num">{i + 1}</span>
+              <div>
+                <div className="rec-top">
+                  <b>{s.title}</b>
+                  <span className={`rec-pill ${p}`}>{PRIORITY_LABEL[p]} priority</span>
+                </div>
+                <p>{s.detail}</p>
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+    </ResultCard>
   );
 }
 
@@ -116,23 +198,8 @@ function GeneralResult({ r }) {
           </div>
         </>
       )}
-      {r.lineSuggestions.length > 0 && (
-        <>
-          <p className="eyebrow">LINE-BY-LINE IMPROVEMENTS</p>
-          <p className="priority-legend">Fill in the [X] blanks with your real numbers. If you don't know a number, leave it out rather than guess.</p>
-          <div className="line-fixes">
-            {r.lineSuggestions.map((s) => (
-              <div className="line-fix" key={s.original}>
-                <p className="before">{s.original}</p>
-                <p className="after">{s.suggestion}</p>
-                <small>{s.issue}</small>
-              </div>
-            ))}
-          </div>
-        </>
-      )}
-      <p className="eyebrow">PRIORITY RECOMMENDATIONS</p>
-      <Actions items={r.priorities} />
+      <LineFixes items={r.lineSuggestions} />
+      <Actions items={r.priorities} title="Priority recommendations" />
     </>
   );
 }
@@ -196,8 +263,7 @@ function RoleResult({ r }) {
           <ul>{r.rejectionReasons.map((s) => <li key={s}>{s}</li>)}</ul>
         </>
       )}
-      <p className="eyebrow">IMPROVEMENT RECOMMENDATIONS</p>
-      <Actions items={r.recommendations} />
+      <Actions items={r.recommendations} title="Improvement recommendations" />
     </>
   );
 }
