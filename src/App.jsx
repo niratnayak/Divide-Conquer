@@ -200,7 +200,14 @@ export function App() {
     }
     api.me()
       .then(({ user }) => setUser(user))
-      .catch(() => tokenStore.clear())
+      .catch((err) => {
+        // Only wipe the token if the server explicitly tells us it's invalid or expired (401).
+        // If it's a temporary network hiccup or server restart, keep the token.
+        if (err?.status === 401) {
+          tokenStore.clear();
+          setUser(null);
+        }
+      })
       .finally(() => setChecking(false));
   }, []);
 

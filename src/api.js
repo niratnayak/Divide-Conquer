@@ -6,9 +6,23 @@ export const ROLE_TO_API = { Student: 'student', 'Placement officer': 'tpo' };
 export const ROLE_FROM_API = { student: 'Student', tpo: 'Placement officer' };
 
 export const tokenStore = {
-  get: () => { try { return sessionStorage.getItem(TOKEN_KEY); } catch { return null; } },
-  set: (t) => { try { sessionStorage.setItem(TOKEN_KEY, t); } catch { /* storage unavailable */ } },
-  clear: () => { try { sessionStorage.removeItem(TOKEN_KEY); } catch { /* storage unavailable */ } },
+  get: () => {
+    try {
+      return sessionStorage.getItem(TOKEN_KEY);
+    } catch {
+      return null;
+    }
+  },
+  set: (t) => {
+    try {
+      sessionStorage.setItem(TOKEN_KEY, t);
+    } catch { /* storage unavailable */ }
+  },
+  clear: () => {
+    try {
+      sessionStorage.removeItem(TOKEN_KEY);
+    } catch { /* storage unavailable */ }
+  },
 };
 
 async function request(path, { method = 'GET', body, form } = {}) {
