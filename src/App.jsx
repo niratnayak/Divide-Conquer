@@ -108,7 +108,7 @@ export function Login({ onLogin }) {
           <h1>Know your resume. Grow your skills.</h1>
           <p>ResumeIQ scores resumes, shows students exactly what to improve, and helps placement officers find the right talent.</p>
         </div>
-        <div className="hero-foot">© 2026 ResumeIQ · AI Resume Insights</div>
+        <div className="hero-foot">© 2026 ResumeIQ</div>
       </section>
       <section className="login-panel">
         <div className="login-form-wrap">
