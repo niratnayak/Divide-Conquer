@@ -2817,7 +2817,7 @@ button:disabled {
 
 .score-head b {
     display: block;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .score-head small {
@@ -2825,7 +2825,7 @@ button:disabled {
     align-items: center;
     gap: 4px;
     color: var(--muted);
-    font-size: 11px;
+    font-size: 13px;
     margin-top: 3px;
 }
 
@@ -2867,7 +2867,7 @@ button:disabled {
 .cat-row .cat-top {
     display: flex;
     justify-content: space-between;
-    font-size: 12px;
+    font-size: 15px;
     margin-bottom: 5px;
 }
 
@@ -2879,7 +2879,7 @@ button:disabled {
 .cat-row small {
     display: block;
     color: var(--muted);
-    font-size: 11px;
+    font-size: 13px;
     line-height: 1.5;
     margin-top: 5px;
 }
@@ -2897,11 +2897,11 @@ button:disabled {
 
 .skill-group small.muted {
     display: block;
-    font-size: 11px;
+    font-size: 13px;
 }
 
 .small-note {
-    font-size: 11px;
+    font-size: 13px;
     margin: 0 0 14px;
 }
 
@@ -2919,7 +2919,7 @@ button:disabled {
 
 .line-fix p {
     margin: 0 0 6px;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 1.5;
 }
 
@@ -2936,5 +2936,9 @@ button:disabled {
 
 .line-fix small {
     color: var(--muted);
-    font-size: 11px;
+    font-size: 13px;
+}
+
+.analysis-panel .chip-row .tag {
+    font-size: 12px;
 }
