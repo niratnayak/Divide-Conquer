@@ -151,11 +151,11 @@ function LineFixes({ items }) {
   );
 }
 
-function Actions({ items, title }) {
+function Actions({ items, title, subtitle }) {
   if (!items?.length) return null;
   const sorted = [...items].sort((a, b) => (PRIORITY_ORDER[a.priority] ?? 1) - (PRIORITY_ORDER[b.priority] ?? 1));
   return (
-    <ResultCard icon={ListChecks} title={title} subtitle="Most important first. Start at the top." count={items.length}>
+    <ResultCard icon={ListChecks} title={title} subtitle={subtitle} count={items.length}>
       <ol className="rec-list">
         {sorted.map((s, i) => {
           const p = PRIORITY_LABEL[s.priority] ? s.priority : 'medium';
@@ -199,7 +199,6 @@ function GeneralResult({ r }) {
         </>
       )}
       <LineFixes items={r.lineSuggestions} />
-      <Actions items={r.priorities} title="Priority recommendations" />
     </>
   );
 }
@@ -263,7 +262,6 @@ function RoleResult({ r }) {
           <ul>{r.rejectionReasons.map((s) => <li key={s}>{s}</li>)}</ul>
         </>
       )}
-      <Actions items={r.recommendations} title="Improvement recommendations" />
     </>
   );
 }
@@ -318,6 +316,7 @@ export default function ResumeAnalysis({ version = 0, hasResume = false }) {
   const canRun = hasResume && aiEnabled && !busy && (tab === 'general' || (roleToSend && !customWithoutJd));
 
   return (
+    <>
     <section className="panel insights-panel analysis-panel">
       <div className="panel-heading">
         <div>
@@ -379,5 +378,15 @@ export default function ResumeAnalysis({ version = 0, hasResume = false }) {
       {current && tab === 'role' && <RoleResult r={current} />}
       {current && <p className="disclaimer">Scores mix fixed rules and AI judgement. Treat them as advice, not a verdict.</p>}
     </section>
+
+    {/* Recommendations get their own section below the analysis, for whichever tab is open */}
+    {current && (
+      <div className="recommendations-section">
+        {tab === 'general'
+          ? <Actions items={current.priorities} title="Priority recommendations" subtitle="From your general analysis. Most important first, so start at the top." />
+          : <Actions items={current.recommendations} title="Improvement recommendations" subtitle={`From your ${current.role} analysis. Most important first, so start at the top.`} />}
+      </div>
+    )}
+    </>
   );
 }

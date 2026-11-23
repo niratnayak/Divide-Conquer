@@ -3413,3 +3413,17 @@ mark.blank {
         transform: rotate(90deg);
     }
 }
+
+/* Recommendations: a separate section below the analysis panel */
+.recommendations-section .result-card {
+    margin: 22px 0 0;
+    padding: 24px 26px;
+    border-radius: 16px;
+    box-shadow: 0 2px 2px #3920440a;
+}
+
+@media (max-width: 640px) {
+    .recommendations-section .result-card {
+        padding: 18px;
+    }
+}
