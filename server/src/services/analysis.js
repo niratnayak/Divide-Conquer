@@ -4,7 +4,7 @@ import crypto from 'node:crypto';
 import Analysis, { serializeAnalysis } from '../models/Analysis.js';
 import StudentProfile from '../models/StudentProfile.js';
 import { chatJSON, isLLMConfigured } from './llm.js';
-import { buildGeneral, buildRole, roleReference } from './resumeScoring.js';
+import { buildGeneral, buildRole, roleReference, resumeProblem } from './resumeScoring.js';
 import { HttpError } from '../utils/asyncHandler.js';
 
 const PROMPT_VERSION = 'a1'; // change to invalidate every saved analysis
@@ -84,9 +84,12 @@ ${SHARED_RULES}`;
 
 async function getProfile(userId) {
   const profile = await StudentProfile.findOne({ user: userId }).select('+resumeText');
-  if (!profile?.resumeText || profile.resumeText.trim().length < 50) {
-    throw new HttpError(400, 'Upload a text-based resume (PDF, DOCX or TXT) before running an analysis.');
+  if (!profile?.resume?.originalName) {
+    throw new HttpError(400, 'Upload your resume (PDF, Word or TXT) before running an analysis.');
   }
+  // Checked before any AI call, so an unreadable or unrelated file costs nothing
+  const problem = resumeProblem(profile.resumeText);
+  if (problem) throw new HttpError(422, problem);
   return profile;
 }
 

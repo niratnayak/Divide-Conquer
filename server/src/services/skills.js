@@ -73,9 +73,15 @@ export async function parseResumeText(filePath, originalName) {
       const result = await parser.getText();
       return typeof result === 'string' ? result : (result?.text || '');
     }
-    if (ext === '.docx' || ext === '.doc') {
+    if (ext === '.docx') {
       const res = await mammoth.extractRawText({ path: filePath });
       return res.value || '';
+    }
+    if (ext === '.doc') {
+      // mammoth only reads .docx; older Word files need word-extractor
+      const { default: WordExtractor } = await import('word-extractor');
+      const doc = await new WordExtractor().extract(filePath);
+      return doc.getBody() || '';
     }
   } catch (err) {
     console.error(`Failed to parse resume text from ${originalName}:`, err.message);

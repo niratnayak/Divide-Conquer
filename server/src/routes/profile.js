@@ -6,6 +6,7 @@ import { requireAuth, requireRole } from '../middleware/auth.js';
 import { resumeUpload } from '../middleware/upload.js';
 import { normalizeList, extractSkillsFromText, parseResumeText } from '../services/skills.js';
 import { queueAnalysis, isStale } from '../services/insights.js';
+import { resumeProblem } from '../services/resumeScoring.js';
 import { isLLMConfigured } from '../services/llm.js';
 import { asyncHandler, HttpError } from '../utils/asyncHandler.js';
 
@@ -66,6 +67,16 @@ router.post(
   resumeUpload.single('resume'),
   asyncHandler(async (req, res) => {
     if (!req.file) throw new HttpError(400, 'Choose a resume file to upload.');
+
+    // Parse text from uploaded resume (PDF, DOCX, TXT). An unreadable or non-resume file is
+    // rejected here, and the previously saved resume is kept.
+    const text = (await parseResumeText(req.file.path, req.file.originalname)) || '';
+    const problem = resumeProblem(text);
+    if (problem) {
+      await fs.unlink(req.file.path).catch(() => {});
+      throw new HttpError(422, problem);
+    }
+
     const profile = await StudentProfile.findOne({ user: req.user.id }).select('+resume.path')
       || (await getOrCreateProfile(req.user.id));
 
@@ -77,16 +88,13 @@ router.post(
       uploadedAt: new Date(),
     };
 
-    // Parse text from uploaded resume (PDF, DOCX, TXT) and extract detected skills
-    const text = (await parseResumeText(req.file.path, req.file.originalname)) || '';
     profile.extractedSkills = extractSkillsFromText(text);
     // Saved so the AI can use it later without re-reading the file
     profile.resumeText = text.replace(/[ \t]+/g, ' ').replace(/\n{3,}/g, '\n\n').trim().slice(0, 20000);
 
     await profile.save();
     if (oldPath && oldPath !== req.file.path) fs.unlink(oldPath).catch(() => {});
-    // resumeReadable is false for scanned PDFs (images) — the AI then works from the profile only
-    await respondWithAnalysis(res, profile._id, { resumeReadable: text.trim().length > 50 });
+    await respondWithAnalysis(res, profile._id);
   })
 );
 

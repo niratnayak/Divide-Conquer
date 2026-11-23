@@ -124,6 +124,31 @@ export function splitSections(text) {
 
 const detectedCount = (sections) => Object.keys(sections).filter((k) => k !== 'header').length;
 
+// ---------- Is this a readable resume? ----------
+
+export const UNREADABLE_RESUME = "We couldn't read the text in this file. It may be a scanned image or a photo. Please re-upload your resume as a text-based PDF or Word file.";
+export const NOT_A_RESUME = "This file doesn't look like a resume: no contact details or resume sections (such as Education, Skills or Projects) were found. Please re-upload your resume.";
+
+const RESUME_TERMS = /\b(education|bachelor|degree|university|college|institute|cgpa|gpa|internships?|projects?|skills|experience|certifications?|b\.?\s?tech|m\.?\s?tech|b\.?\s?e\.)/gi;
+
+/**
+ * Null if the text reads as a resume, otherwise the message to show. Rule-based, so no AI call
+ * is spent on a scanned image, a garbled file or a document that isn't a resume.
+ */
+export function resumeProblem(text) {
+  const t = String(text || '');
+  const letters = (t.match(/[A-Za-z]/g) || []).length;
+  // Scanned PDFs give no text; broken encodings give mostly symbols
+  if (letters < 150 || letters / t.replace(/\s/g, '').length < 0.5) return UNREADABLE_RESUME;
+
+  const contact = /\S+@\S+\.\S+/.test(t) || /(\+?\d[\d\s-]{8,}\d)/.test(t);
+  const headings = detectedCount(splitSections(t)) >= 2;
+  const terms = new Set((t.match(RESUME_TERMS) || []).map((s) => s.toLowerCase())).size >= 3;
+  const skills = extractSkillsFromText(t).length >= 2;
+  const signals = [contact, headings, terms, skills].filter(Boolean).length;
+  return (contact || headings) && signals >= 2 ? null : NOT_A_RESUME;
+}
+
 const BULLET = /^([•●▪◦‣*·–—-]|\d+[.)])\s*/;
 
 /** Bullet points from experience and projects (falls back to longer lines if no bullet marks survived). */
