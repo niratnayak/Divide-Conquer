@@ -65,5 +65,4 @@ export const api = {
   analyseRole: (role, jd) => request('/analysis/role', { method: 'POST', body: { role, jd } }),
 
   myApplications: () => request('/applications/me'),
-  demand: () => request('/market/demand'),
 };

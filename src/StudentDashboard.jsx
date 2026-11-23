@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {
-  CheckCircle2, X, Plus, Upload, ChartNoAxesColumn
+  CheckCircle2, X, Plus, Upload, AlertTriangle
 } from 'lucide-react';
 import { api } from './api.js';
 import ResumeAnalysis from './ResumeAnalysis.jsx';
 import TagInput from './TagInput.jsx';
-import { usePolling } from './usePolling.js';
 
 function Tag({ children, tone = '' }) {
   return <span className={`tag ${tone}`}>{children}</span>;
@@ -25,10 +24,10 @@ export function StudentDashboard({ user, onSelectJob }) {
   const [saveError, setSaveError] = useState('');
   const [uploading, setUploading] = useState(false);
   const [uploadNotice, setUploadNotice] = useState('');
+  const [uploadError, setUploadError] = useState('');
   const [cgpa, setCgpa] = useState('');
   const [cgpaError, setCgpaError] = useState('');
   const [department, setDepartment] = useState('');
-  const [demandList, setDemandList] = useState([]);
   // Bumped after a save or upload so the AI panel shows the new analysis status
   const [aiVersion, setAiVersion] = useState(0);
 
@@ -53,21 +52,8 @@ export function StudentDashboard({ user, onSelectJob }) {
         console.warn('Could not load profile from DB:', err.message);
       });
 
-    api.demand()
-      .then(({ demand: rows }) => {
-        if (active && rows) {
-          setDemandList(rows.map(r => [r.skill, r.count]));
-        }
-      })
-      .catch(() => {});
-
     return () => { active = false; };
   }, [user]);
-
-  // Market Pulse follows the TPO's postings, so refresh it live as well
-  usePolling(() => {
-    api.demand().then(({ demand: rows }) => rows && setDemandList(rows.map(r => [r.skill, r.count]))).catch(() => {});
-  }, 15000);
 
   const handleNameChange = (e) => {
     const val = e.target.value;
@@ -172,26 +158,24 @@ export function StudentDashboard({ user, onSelectJob }) {
     if (!file) return;
     setUploading(true);
     setUploadNotice('');
-    setSaveError('');
+    setUploadError('');
     try {
       const { profile } = await api.uploadResume(file);
       if (profile) {
         setResume(profile.resume);
         setExtracted(profile.extractedSkills || []);
         setAiVersion(v => v + 1);
-        setUploadNotice(`Resume "${profile.resume?.originalName || file.name}" uploaded & saved to database.`);
+        setUploadNotice('Resume uploaded. Run an analysis below to see your score.');
         setTimeout(() => setUploadNotice(''), 5000);
       }
     } catch (err) {
       // Unreadable or non-resume files are rejected by the server with a "please re-upload" message
-      setSaveError(err.status === 422 ? err.message : `Upload failed: ${err.message}`);
+      setUploadError(err.status === 422 ? err.message : `Upload failed: ${err.message}`);
     } finally {
       setUploading(false);
       e.target.value = '';
     }
   };
-
-  const maxDemand = Math.max(1, ...demandList.map(([, n]) => n));
 
   const resumeDisplayName = (typeof resume === 'string' ? resume : resume?.originalName) || '';
 
@@ -369,51 +353,48 @@ export function StudentDashboard({ user, onSelectJob }) {
             ))}
           </div>
 
-          <label className="upload-zone">
-            <Upload size={18} />
-            <span>
-              <b>{resumeDisplayName || (uploading ? 'Uploading resume…' : 'Upload your resume')}</b>
-              <small>
-                PDF, Word (DOC or DOCX), or TXT · up to 5 MB
-                {extracted && extracted.length > 0 ? ` · detected: ${extracted.join(', ')}` : ''}
-              </small>
+          {saved && <p className="inline-success" style={{ marginTop: '8px' }}><CheckCircle2 size={14} /> Profile changes saved to database.</p>}
+          {saveError && <p className="field-error" style={{ marginTop: '8px' }}>{saveError}</p>}
+        </section>
+
+        <section className="resume-card">
+          <p className="resume-card-eyebrow">YOUR RESUME</p>
+          <h3>{resumeDisplayName ? 'Ready for analysis' : 'Upload your resume'}</h3>
+          <p className="resume-card-sub">PDF, Word (DOC or DOCX) or TXT · up to 5 MB</p>
+
+          <label className={`resume-drop ${uploading ? 'is-busy' : ''}`}>
+            <Upload size={20} />
+            <span className="resume-drop-name">
+              {uploading ? 'Uploading…' : resumeDisplayName || 'No file yet'}
             </span>
-            <span className="upload-btn">
-              {uploading ? 'Uploading…' : resumeDisplayName ? 'Replace file' : 'Choose file'}
-            </span>
+            <span className="resume-drop-btn">{resumeDisplayName ? 'Replace file' : 'Choose file'}</span>
             {/* Native input is hidden: its "No file chosen" text contradicted the saved file name */}
             <input
-              className="file-input-hidden"
+              className="resume-file-input"
               type="file"
               accept=".pdf,.doc,.docx,.txt"
               onChange={handleResumeUpload}
               disabled={uploading}
             />
           </label>
-          {uploadNotice && <p className="inline-success" style={{ marginTop: '8px' }}><CheckCircle2 size={14} /> {uploadNotice}</p>}
-          {saved && <p className="inline-success" style={{ marginTop: '8px' }}><CheckCircle2 size={14} /> Profile changes saved to database.</p>}
-          {saveError && <p className="field-error" style={{ marginTop: '8px' }}>{saveError}</p>}
-        </section>
+          {uploadNotice && <p className="resume-card-msg ok"><CheckCircle2 size={14} /> {uploadNotice}</p>}
+          {uploadError && <p className="resume-card-msg err"><AlertTriangle size={14} /> {uploadError}</p>}
 
-        <section className="market-card">
-          <div className="market-title">
-            <span>MARKET PULSE</span>
-            <ChartNoAxesColumn size={17} />
-          </div>
-          <h3>Skills employers ask for</h3>
-          <p>Stay one step ahead of the next posting.</p>
-          {demandList.length === 0 && <p>No open postings yet.</p>}
-          {demandList.map(([skill, n]) => (
-            <div className="demand-row" key={skill}>
-              <div>
-                <b>{skill}</b>
-                <small>{n} posting{n === 1 ? '' : 's'}</small>
+          {extracted.length > 0 && (
+            <>
+              <p className="resume-card-eyebrow">SKILLS FOUND IN YOUR RESUME</p>
+              <div className="resume-card-skills">
+                {extracted.map(s => <span key={s}>{s}</span>)}
               </div>
-              <div className="bar">
-                <i style={{ width: `${(n / maxDemand) * 100}%` }} />
-              </div>
-            </div>
-          ))}
+            </>
+          )}
+
+          <p className="resume-card-eyebrow">HOW IT WORKS</p>
+          <ol className="resume-steps">
+            <li><span><b>Upload</b> your latest resume.</span></li>
+            <li><span><b>Analyse</b> it for overall quality or for a role you're aiming at.</span></li>
+            <li><span><b>Improve</b> it with the suggestions, then upload again to see your score move.</span></li>
+          </ol>
         </section>
       </div>
 

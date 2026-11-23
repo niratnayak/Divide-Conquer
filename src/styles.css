@@ -497,63 +497,6 @@ textarea:focus-visible {
     font-size: 11px
 }
 
-.market-card {
-    background: linear-gradient(145deg, #59286d, #4e2261);
-    border-radius: 16px;
-    padding: 22px;
-    color: white;
-    box-shadow: 0 3px 5px #3820432b
-}
-
-.market-title {
-    display: flex;
-    justify-content: space-between;
-    color: #d5b9e0;
-    font-size: 9px;
-    letter-spacing: 1.5px;
-    font-weight: 800
-}
-
-.market-card h3 {
-    font-size: 18px;
-    margin: 12px 0 3px
-}
-
-.market-card>p {
-    font-size: 11px;
-    color: #d6c4df;
-    margin: 0 0 20px
-}
-
-.demand-row {
-    margin: 13px 0
-}
-
-.demand-row>div:first-child {
-    display: flex;
-    justify-content: space-between;
-    font-size: 10px;
-    margin-bottom: 5px
-}
-
-.demand-row small {
-    color: #d3bbdc
-}
-
-.bar {
-    height: 5px;
-    border-radius: 10px;
-    background: #ffffff2a;
-    overflow: hidden
-}
-
-.bar i {
-    height: 100%;
-    display: block;
-    background: #c9a7d9;
-    border-radius: 10px
-}
-
 .opportunities {
     margin-top: 35px
 }
@@ -1208,31 +1151,6 @@ textarea:focus-visible {
     font-size: 12px;
 }
 
-/* Market Pulse card */
-.market-card {
-    padding: 28px;
-}
-
-.market-title {
-    font-size: 11px;
-}
-
-.market-card h3 {
-    font-size: 23px;
-}
-
-.market-card>p {
-    font-size: 14px;
-}
-
-.demand-row>div:first-child {
-    font-size: 13px;
-}
-
-.demand-row small {
-    font-size: 11px;
-}
-
 /* Opportunities section */
 .section-heading h2 {
     font-size: 23px;
@@ -1437,9 +1355,6 @@ textarea:focus-visible {
         font-size: 34px;
     }
 
-    .market-card h3 {
-        font-size: 21px;
-    }
 }
 
 @media (max-width: 560px) {
@@ -1455,10 +1370,6 @@ textarea:focus-visible {
     .post-panel,
     .leaderboard-panel {
         padding: 18px;
-    }
-
-    .market-card {
-        padding: 20px;
     }
 
     .section-heading h2 {
@@ -1660,25 +1571,10 @@ input.has-error {
     color: #8c3b3b;
 }
 
-/* Keep Market Pulse independent of profile height */
-
 .student-grid {
     display: grid;
     grid-template-columns: 1.3fr 1fr;
     align-items: start !important;
-}
-
-.market-card {
-    align-self: start !important;
-    height: fit-content !important;
-    min-height: 0 !important;
-}
-
-@media (min-width: 900px) {
-    .market-card {
-        position: sticky;
-        top: 95px;
-    }
 }
 
 .post-form select {
@@ -3096,5 +2992,185 @@ button:disabled {
 
     .cc-ticks {
         grid-column: 1;
+    }
+}
+
+/* Resume card (right column of the student page) */
+.resume-card {
+    align-self: start;
+    background: linear-gradient(150deg, #5d2a72, #45205a);
+    color: #fff;
+    border-radius: 18px;
+    padding: 26px;
+    box-shadow: 0 10px 28px #3820432e;
+}
+
+@media (min-width: 1001px) {
+    .resume-card {
+        position: sticky;
+        top: 95px;
+    }
+}
+
+.resume-card h3 {
+    font-size: 22px;
+    margin: 0 0 4px;
+}
+
+.resume-card-eyebrow {
+    font-size: 11px;
+    letter-spacing: 1.8px;
+    font-weight: 800;
+    color: #d5b9e0;
+    margin: 22px 0 10px;
+}
+
+.resume-card-eyebrow:first-child {
+    margin-top: 0;
+}
+
+.resume-card-sub {
+    font-size: 13px;
+    color: #dccbe4;
+    margin: 0 0 16px;
+}
+
+.resume-drop {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 6px 12px;
+    padding: 16px;
+    border: 1.5px dashed #ffffff55;
+    border-radius: 14px;
+    background: #ffffff12;
+    cursor: pointer;
+    transition: background .15s, border-color .15s;
+}
+
+.resume-drop:hover,
+.resume-drop:focus-within {
+    background: #ffffff1f;
+    border-color: #ffffffa0;
+}
+
+.resume-drop.is-busy {
+    cursor: progress;
+    opacity: .8;
+}
+
+.resume-drop-name {
+    font-weight: 700;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+.resume-drop-btn {
+    grid-column: 1 / -1;
+    justify-self: start;
+    margin-top: 6px;
+    background: #fff;
+    color: var(--purple);
+    font-weight: 700;
+    font-size: 13px;
+    padding: 9px 16px;
+    border-radius: 10px;
+}
+
+.resume-file-input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.resume-card-msg {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    font-size: 13px;
+    line-height: 1.45;
+    margin: 10px 0 0;
+    padding: 10px 12px;
+    border-radius: 10px;
+}
+
+.resume-card-msg svg {
+    flex: none;
+    margin-top: 2px;
+}
+
+.resume-card-msg.ok {
+    background: #e6f4ec;
+    color: #2f6e4d;
+}
+
+.resume-card-msg.err {
+    background: #fbe9e9;
+    color: #8c3b3b;
+}
+
+.resume-card-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.resume-card-skills span {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: #ffffff22;
+    color: #fff;
+}
+
+.resume-steps {
+    list-style: none;
+    counter-reset: step;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+}
+
+.resume-steps li {
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    gap: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #eadcf0;
+}
+
+.resume-steps li::before {
+    content: counter(step);
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--purple);
+    font-weight: 800;
+    font-size: 12px;
+}
+
+.resume-steps b {
+    color: #fff;
+}
+
+/* One column on tablets and phones, with the resume card first (uploading is the first step) */
+@media (max-width: 1000px) {
+    .student-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .resume-card {
+        order: -1;
     }
 }
