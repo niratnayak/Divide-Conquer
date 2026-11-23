@@ -107,9 +107,9 @@ export function OfficerView({ jobs, reloadJobs, onSelectJob }) {
     <div className="workspace officer-workspace">
       <div className="page-heading">
         <div>
-          <p className="eyebrow">PLACEMENT OFFICER DASHBOARD</p>
-          <h1>Find the right students for every <em>role.</em></h1>
-          <p className="muted">Upload job requirements and shortlist candidates ranked by skill match.</p>
+          <p className="eyebrow">STUDENT SKILL INSIGHTS</p>
+          <h1>Discover the right talent, <em>skill by skill.</em></h1>
+          <p className="muted">Post a role with the skills it needs. ResumeIQ ranks students by the skills on their profiles and resumes, so you can shortlist with confidence.</p>
         </div>
         <Tag>
           <Users size={14} />{openCount} active roles · {totalStudents} student profiles
