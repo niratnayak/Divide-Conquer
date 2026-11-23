@@ -179,15 +179,12 @@ export function StudentDashboard({ user, onSelectJob }) {
         setResume(profile.resume);
         setExtracted(profile.extractedSkills || []);
         setAiVersion(v => v + 1);
-        if (profile.resumeReadable === false) {
-          setSaveError('Resume saved, but no text could be read from it (it may be a scanned image). Upload a text-based PDF, DOCX or TXT for better matching and AI suggestions.');
-        } else {
-          setUploadNotice(`Resume "${profile.resume?.originalName || file.name}" uploaded & saved to database.`);
-          setTimeout(() => setUploadNotice(''), 5000);
-        }
+        setUploadNotice(`Resume "${profile.resume?.originalName || file.name}" uploaded & saved to database.`);
+        setTimeout(() => setUploadNotice(''), 5000);
       }
     } catch (err) {
-      setSaveError(`Upload failed: ${err.message}`);
+      // Unreadable or non-resume files are rejected by the server with a "please re-upload" message
+      setSaveError(err.status === 422 ? err.message : `Upload failed: ${err.message}`);
     } finally {
       setUploading(false);
       e.target.value = '';
