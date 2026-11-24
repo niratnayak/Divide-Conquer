@@ -1983,15 +1983,15 @@ mark.blank {
 }
 
 .rec-item.high {
-    border-left-color: #b4534f;
+    border-left-color: #e5484d;
 }
 
 .rec-item.medium {
-    border-left-color: #c58a2c;
+    border-left-color: #f5b400;
 }
 
 .rec-item.low {
-    border-left-color: #4e788d;
+    border-left-color: #22a06b;
 }
 
 .rec-top {
@@ -2021,18 +2021,18 @@ mark.blank {
 }
 
 .rec-pill.high {
-    background: #fbe9e9;
-    color: #8c3b3b;
+    background: #fde8e8;
+    color: #b42318;
 }
 
 .rec-pill.medium {
-    background: #fbf0dc;
-    color: #7a5413;
+    background: #fff4cc;
+    color: #8a5a00;
 }
 
 .rec-pill.low {
-    background: #e5f3ee;
-    color: #43667d;
+    background: #dcf5e8;
+    color: #146c43;
 }
 
 @media (max-width: 640px) {
