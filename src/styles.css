@@ -2944,3 +2944,14 @@ mark.blank {
     font-size: 15px;
     color: var(--ink);
 }
+
+/* Missing or incomplete sections: required ones in red, optional ones in yellow */
+.missing-sections .tag.missing {
+    background: #d92d20;
+    color: #fff;
+}
+
+.missing-sections .tag.optional {
+    background: #f5b400;
+    color: #3d2b00;
+}

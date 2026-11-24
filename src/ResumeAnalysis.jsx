@@ -189,9 +189,9 @@ function GeneralResult({ r }) {
       {r.missingSections.length > 0 && (
         <>
           <p className="eyebrow">MISSING OR INCOMPLETE SECTIONS</p>
-          <div className="chip-row">
+          <div className="chip-row missing-sections">
             {r.missingSections.map((m) => (
-              <Tag key={m.label} tone={m.optional ? '' : 'missing'}>
+              <Tag key={m.label} tone={m.optional ? 'optional' : 'missing'}>
                 {m.label} · {m.status}{m.optional ? ' (optional)' : ''}
               </Tag>
             ))}
