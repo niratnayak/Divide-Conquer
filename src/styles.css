@@ -2880,15 +2880,15 @@ mark.blank {
 }
 
 .iv-fb.good {
-    border-top-color: var(--brand);
+    border-top-color: #22a06b;
 }
 
 .iv-fb.miss {
-    border-top-color: #c58a2c;
+    border-top-color: #f5b400;
 }
 
 .iv-fb.improve {
-    border-top-color: var(--accent);
+    border-top-color: #e5484d;
 }
 
 .iv-fb p,
