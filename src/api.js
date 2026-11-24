@@ -39,7 +39,9 @@ async function request(path, { method = 'GET', body, form } = {}) {
   if (res.status === 204) return null;
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
-    const err = new Error(data.error || `Request failed (${res.status})`);
+    // No error text from our API means the request never reached it (e.g. the dev proxy got no answer)
+    const fallback = res.status >= 500 ? "Couldn't reach the ResumeIQ server. Check that it is running, then try again." : `Request failed (${res.status})`;
+    const err = new Error(data.error || fallback);
     err.status = res.status;
     throw err;
   }

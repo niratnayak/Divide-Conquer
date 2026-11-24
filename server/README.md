@@ -80,5 +80,5 @@ many students are at each level, the share who have it, and who is sharpest (wit
 ## Notes
 
 - CGPA is self-reported (honor system).
-- Resume text is read from PDF (`pdf-parse`), DOCX (`mammoth`), DOC (`word-extractor`) and TXT. Scanned or unrelated files are rejected at upload.
+- Resume text is read from PDF (`pdfjs-dist`, pinned to 4.8.69, the newest release that runs on Node 18; newer ones need Node 20+), DOCX (`mammoth`), DOC (`word-extractor`) and TXT. Scanned or unrelated files are rejected at upload.
 - Resumes are stored on local disk in `uploads/`. For deployment on hosts with ephemeral disks, switch to S3/Cloudinary.

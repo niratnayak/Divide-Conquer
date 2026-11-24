@@ -15,6 +15,11 @@ if (!process.env.JWT_SECRET) {
   process.exit(1);
 }
 
+// A library failing asynchronously (e.g. while reading a resume file) must not take the whole API down
+process.on('unhandledRejection', (err) => {
+  console.error('Unhandled promise rejection:', err);
+});
+
 const app = express();
 
 app.use(cors({

@@ -59,6 +59,28 @@ export function extractSkillsFromText(text) {
   return KNOWN_SKILLS.filter((skill) => mentionsSkill(text, skill));
 }
 
+const MAX_PDF_PAGES = 10; // a resume is a few pages; stops a huge PDF from tying up the server
+
+/**
+ * Text of a PDF, page by page, using Mozilla's pdf.js. pdfjs-dist is pinned to 4.8.69, the newest release
+ * that supports Node 18 (4.9+ and pdf-parse 2 need Node 20+ and could take the server down on older Node).
+ */
+async function readPdfText(filePath) {
+  const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
+  const data = new Uint8Array(await fs.readFile(filePath));
+  const doc = await pdfjs.getDocument({ data, isEvalSupported: false, disableFontFace: true, verbosity: 0 }).promise;
+  try {
+    const pages = [];
+    for (let n = 1; n <= Math.min(doc.numPages, MAX_PDF_PAGES); n += 1) {
+      const content = await (await doc.getPage(n)).getTextContent();
+      pages.push(content.items.map((item) => (item.str || '') + (item.hasEOL ? '\n' : '')).join(''));
+    }
+    return pages.join('\n');
+  } finally {
+    await doc.destroy();
+  }
+}
+
 /** Extracts readable text from uploaded TXT, PDF, or DOCX files. */
 export async function parseResumeText(filePath, originalName) {
   const ext = path.extname(originalName || filePath).toLowerCase();
@@ -67,16 +89,7 @@ export async function parseResumeText(filePath, originalName) {
       return await fs.readFile(filePath, 'utf8');
     }
     if (ext === '.pdf') {
-      // pdf-parse v2 (see package.json): a PDFParse class, not the v1 default-export function
-      const { PDFParse } = await import('pdf-parse');
-      const buffer = await fs.readFile(filePath);
-      const parser = new PDFParse({ data: buffer });
-      try {
-        const result = await parser.getText();
-        return typeof result === 'string' ? result : (result?.text || '');
-      } finally {
-        await parser.destroy?.();
-      }
+      return await readPdfText(filePath);
     }
     if (ext === '.docx') {
       const res = await mammoth.extractRawText({ path: filePath });
