@@ -2618,7 +2618,7 @@ mark.blank {
     padding: 0;
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 10px;
+    gap: 14px;
 }
 
 .iv-list li {
@@ -2633,9 +2633,9 @@ mark.blank {
     grid-template-areas: "num cat badge" "text text text";
     align-items: center;
     align-content: start;
-    gap: 8px 8px;
+    gap: 14px 8px;
     text-align: left;
-    padding: 10px 12px;
+    padding: 16px;
     border: 1px solid var(--border);
     border-radius: 12px;
     background: #fff;
@@ -2680,9 +2680,11 @@ mark.blank {
     grid-area: text;
     font-size: 15px;
     font-weight: 700;
-    white-space: nowrap;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .iv-list .iv-num { grid-area: num; }
