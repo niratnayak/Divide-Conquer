@@ -480,15 +480,80 @@ textarea:focus-visible {
     margin-top: 35px
 }
 
+/* Footer: dark, matching the header */
 .app-footer {
-    text-align: center;
-    padding: 22px;
-    color: #699cac;
-    font-size: 10px
+    margin-top: 48px;
+    background: radial-gradient(circle at 15% 100%, #5b91a333 0, transparent 40%), linear-gradient(100deg, #131b2b, #1e3046 55%, #2f4a63);
+    color: #fff;
 }
 
-.app-footer span {
-    padding: 0 5px
+.app-footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    padding: 34px max(5vw, 24px) 28px;
+}
+
+.app-footer-brand {
+    display: grid;
+    gap: 12px;
+    max-width: 460px;
+}
+
+.app-footer-brand p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #c4d6dd;
+}
+
+.app-footer .brand-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--mint);
+    color: var(--ink);
+}
+
+.app-footer .brand b {
+    font-size: 17px;
+}
+
+.app-footer .brand small {
+    font-size: 10px;
+    letter-spacing: 1.8px;
+    color: var(--mint);
+}
+
+.app-footer-team {
+    display: grid;
+    justify-items: end;
+    gap: 2px;
+    padding: 14px 20px;
+    border: 1px solid #ffffff26;
+    border-radius: 14px;
+    background: #ffffff0d;
+}
+
+.app-footer-team small {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: var(--mint);
+}
+
+.app-footer-team b {
+    font-size: 18px;
+    color: #fff;
+}
+
+.app-footer-bottom {
+    border-top: 1px solid #ffffff1f;
+    padding: 14px max(5vw, 24px);
+    font-size: 12px;
+    color: #a9bfc8;
 }
 
 .form-error {

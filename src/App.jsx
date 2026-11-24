@@ -238,7 +238,19 @@ export function App() {
           user={user}
         />
       )}
-      <footer className="app-footer">ResumeIQ <span>·</span> AI resume insights</footer>
+      <footer className="app-footer">
+        <div className="app-footer-inner">
+          <div className="app-footer-brand">
+            <Brand />
+            <p>AI-powered resume analysis, interview practice and skill insights for students and placement teams.</p>
+          </div>
+          <div className="app-footer-team">
+            <small>Developed by</small>
+            <b>Team Divide &amp; Conquer</b>
+          </div>
+        </div>
+        <div className="app-footer-bottom">© {new Date().getFullYear()} ResumeIQ. All rights reserved.</div>
+      </footer>
     </div>
   );
 }
