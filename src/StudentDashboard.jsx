@@ -182,7 +182,7 @@ export function StudentDashboard({ user, onSelectJob }) {
         <div>
           <p className="eyebrow">SMART CAREER INSIGHTS</p>
           <h1>Your Resume, <em>Smarter with AI</em></h1>
-          <p className="muted">Get instant AI-powered resume analysis, skill recommendations, and job compatibility scores to improve your placement opportunities.</p>
+          <p className="muted">Get instant AI-powered resume analysis, skill recommendations to improve your placement opportunities.</p>
         </div>
         <Tag tone={resumeDisplayName ? 'success' : ''}>
           <CheckCircle2 size={13} /> {resumeDisplayName ? 'Resume uploaded' : 'Add a resume to get match-ready'}
