@@ -305,11 +305,9 @@ export default function InterviewPrep({ hasResume = false }) {
                 <li key={q.id}>
                   <button type="button" className={`${q.id === active?.id ? 'on' : ''} ${q.followUpOf ? 'follow' : ''}`} onClick={() => setActiveId(q.id)}>
                     <span className="iv-num">{q.followUpOf ? <CornerDownRight size={12} /> : i + 1}</span>
-                    <span className="iv-list-text">
-                      <small>{q.followUpOf ? 'Follow-up' : CATEGORY_LABEL[q.category]}</small>
-                      {q.question}
-                    </span>
+                    <small className="iv-list-cat">{q.followUpOf ? 'Follow-up' : CATEGORY_LABEL[q.category]}</small>
                     <span className={`iv-badge ${q.evaluation ? '' : 'todo'}`}>{q.evaluation ? q.evaluation.overall : '–'}</span>
+                    <span className="iv-list-text">{q.question}</span>
                   </button>
                 </li>
               ))}
