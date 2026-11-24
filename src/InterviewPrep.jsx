@@ -24,6 +24,13 @@ const CUSTOM = 'Other / Custom Role';
 const MIN_ANSWER = 20;
 const MAX_ANSWER = 3000;
 
+/** Short tile title: what the question is about (a project, skill, internship...), not the whole question. */
+function tileTitle(q, questions) {
+  const parent = q.followUpOf && questions.find((x) => x.id === q.followUpOf);
+  const about = (parent ? parent.basedOn : q.basedOn) || q.tests || CATEGORY_LABEL[q.category];
+  return about.charAt(0).toUpperCase() + about.slice(1);
+}
+
 const verdict = (score) => (score >= 8 ? 'Strong answer' : score >= 6 ? 'Good, with gaps' : score >= 4 ? 'Needs work' : 'Off track');
 
 /** Text with its [placeholders] highlighted. */
@@ -303,11 +310,11 @@ export default function InterviewPrep({ hasResume = false }) {
             <ol className="iv-list">
               {session.questions.map((q, i) => (
                 <li key={q.id}>
-                  <button type="button" className={`${q.id === active?.id ? 'on' : ''} ${q.followUpOf ? 'follow' : ''}`} onClick={() => setActiveId(q.id)}>
+                  <button type="button" title={q.question} className={`${q.id === active?.id ? 'on' : ''} ${q.followUpOf ? 'follow' : ''}`} onClick={() => setActiveId(q.id)}>
                     <span className="iv-num">{q.followUpOf ? <CornerDownRight size={12} /> : i + 1}</span>
                     <small className="iv-list-cat">{q.followUpOf ? 'Follow-up' : CATEGORY_LABEL[q.category]}</small>
                     <span className={`iv-badge ${q.evaluation ? '' : 'todo'}`}>{q.evaluation ? q.evaluation.overall : '–'}</span>
-                    <span className="iv-list-text">{q.question}</span>
+                    <span className="iv-list-text">{tileTitle(q, session.questions)}</span>
                   </button>
                 </li>
               ))}

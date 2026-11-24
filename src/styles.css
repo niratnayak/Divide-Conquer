@@ -2678,10 +2678,11 @@ mark.blank {
 
 .iv-list-text {
     grid-area: text;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
+    font-size: 15px;
+    font-weight: 700;
+    white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .iv-list .iv-num { grid-area: num; }
